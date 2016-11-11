@@ -1,2 +1,2 @@
-all:
-	Preprocessor/preprocess.py $1 
+clean:
+	rm tmp/*

@@ -32,7 +32,7 @@ text = extractdep(text, usrlib)
 print text
 # print dependencies
 
-file = open('../deps', 'w')
+file = open('tmp/deps', 'w')
 for dep in dependencies:
 	file.write(dep + "\n")
 file.close()

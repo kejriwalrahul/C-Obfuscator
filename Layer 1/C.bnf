@@ -1,65 +1,64 @@
 <Goal> ::= <Variables_And_Functions>* <Main> <Variables_And_Functions>* <EOF>
 
-<Variables_And_Function> ::= <declaration-statement>
+<Variables_And_Function> ::=  <declaration-statement>
                             | <FunctionDefinition>
                             | <FunctionDeclaration>
                             | <StructDeclaration>
                             | <typedef>
-                            | <enum>
+                            | <EnumDeclaration>
 
-
-<Main> ::= <Main_Return_Type> "main" "(" (<int> <Identifier> "," <char>"*" <Identifier> "[" "]")? ")" <block>
-
-<Main_Return_Type> ::= <int>
-                     | <void>
-
-<ArgList> ::= <Argum> ("," <Argum>)*;
-
-<Argum> ::= <type> <Identifier>
+<declaration-statement> ::= <base-type> <object-list> ";"
 
 <FunctionDefinition> ::= <type-specifier> <Identifier> "(" (<ArgList>)? ")" <block>                   
-
-<ParameterDec> ::= <type> (<Identifier>)?
-                
-<ParameterList> ::= <ParameterDec> ("," <ParameterDec>)* 
 
 <FunctionDeclaration> ::= <type-specifier> <Identifier> "(" (<ParameterList>)? ")" ";"
 
 <StructDeclaration>  ::= "struct" (<Identifier>)? "{" (<declaration-statement>)* "}" ";"
 
+<typedef> ::= "typedef" <type> <Identifier> ";"
+
 <EnumDeclaration>  ::= "enum" <Identifier> "{" <Identifier> ("," <Identifier>)* "}" ";"  
 
-<declaration-statement> ::= <base-type> <object-list> ";"
+<Main> ::= <Main_Return_Type> "main" "(" (<int> <Identifier> "," <char>"*" ("*")? <Identifier> ("[" "]")? )? ")" <block>
+
+<type> ::= <base-type> ("*")*    
+    
+<base-type> ::= (<storage-class>)? <type-specifier>
+
+<storage-class>  ::= "static"
+    
+<type-specifier> ::= "int"
+                     | "void"
+                     | "char"
+                     | "short
+                     | "long"
+                     | "float"
+                     | "double"
+                     | "signed"
+                     | "unsigned"
+                     | <Identifier>
+                     | "struct" <Identifier>
+                     | "struct" (<Identifier>)? "{" (<declaration-statement>)* "}"
+                     | "enum" (<Identifier>)? "{" <Identifier> ("," <Identifier>)* "}"
+                
+<ArgList> ::= <Argum> ("," <Argum>)*;
+
+<Argum> ::= <type> <Identifier>
+
+<ParameterList> ::= <ParameterDec> ("," <ParameterDec>)* 
+
+<ParameterDec> ::= <type> (<Identifier>)?
+    
+<Main_Return_Type> ::= <int>
+                     | <void>
                         
 <object-list> ::= <object-type> ("," <object-type>)*
                        
-<object-type> ::= "*"* <Identifier> ("[" <Expression> "]")* ("=" <Expression>)?// Expression should be const expr
-                
-<base-type> ::= (<storage-class>)? <type-specifier>                
-                      
-<type> ::= <base-type> ("*")*
-
-<storage-class> ::= <static>
-
-<type-specifier> ::= <int>
-         | <void>
-         | <char>
-         | <short>
-         | <long>
-         | <float>
-         | <double>
-         | <signed>
-         | <unsigned>
-         | <Identifier>
-         | "struct" <Identifier>
-         | "struct" (<Identifier>)? "{" (<declaration-statement>)* "}"
-         | "enum" (<Identifier>)? "{" <Identifier> ("," <Identifier>)* "}"
-
-<typedef> ::= "typedef" <type> <Identifier> ";"
-                           
+<object-type> ::= ("*")* <Identifier> ("[" <Expression> "]")* ("=" <Expression>)? // Expression should be const expr wtf? array initializer?
+                                      
 <block> ::= "{" <statement-list> "}"
 
-<statement-list> ::= (<label>? <statement>)*
+<statement-list> ::= ((<label>)? <statement>)*
 
 <statement> ::= <for-loop>
             |   <while-loop>
