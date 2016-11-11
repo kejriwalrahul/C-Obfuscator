@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #include <unistd.h>
-#include <wait.h>
 #include <limits.h>
 #include <errno.h>
 
@@ -29,7 +28,7 @@ int next_bg = 1;
 int fd[2];
 int fd_in;
 
-// Define characters that delimit words in input 
+// Define characters that delimit words in input
 int iswhspace(char c){
 	switch(c){
 		case ' ' :
@@ -45,7 +44,7 @@ int iswhspace(char c){
 // Prints error msg
 void* error2(char *s){
 	printf("Error: %s\n", s);
-	return NULL;	
+	return NULL;
 }
 
 // Prints running background process list
@@ -123,7 +122,7 @@ void free_mem(struct command *c){
 // Command parser - tokenizer
 struct command* parseCommand(char *s){
 	// 'par'  holds head of command linked list, i.e., it contains the first command in list of commands
-	struct command *par  = calloc(1, sizeof(struct command)); 
+	struct command *par  = calloc(1, sizeof(struct command));
 	struct command *curr = par;		// 'curr' refers to current element in linked list of commands
 	curr->next = NULL;				// Initialize next with NULL
 
@@ -133,7 +132,7 @@ struct command* parseCommand(char *s){
 	int b = 0;
 	// buff holds current token being built
 	char buff[size+1];
-	
+
 	int i;
 	for(i=0;s[i]!='\0';i++){
 		// ignore whitespace
@@ -164,7 +163,7 @@ struct command* parseCommand(char *s){
 		// Accepting quoted tokens
 		if(s[i] == '\"'){
 			i++;
-			while((s[i] != '\"' || s[i-1] == '\\') && s[i] != '\0'){	
+			while((s[i] != '\"' || s[i-1] == '\\') && s[i] != '\0'){
 				if(s[i] == '\"' && s[i-1] == '\\') b--;
 				buff[b++] = s[i++];
 			}
@@ -175,7 +174,7 @@ struct command* parseCommand(char *s){
 			strcpy(curr->argv[k], buff);			// copy token string
 			k++; 									// increment index counter
 			strcpy(buff, "");						// reset buffer
-			b = 0;				
+			b = 0;
 			continue;
 		}
 
@@ -214,10 +213,10 @@ char* printPrompt(){
 		getlogin_r(username, LOGIN_NAME_MAX);
 		run = 1;
 	}
-	
+
 	// Deploy prompt:
 	static char p[1000];
-	strcpy(p,""); 
+	strcpy(p,"");
 	strcat(p, username);
 	strcat(p,"@");
 	strcat(p, hostname);
@@ -278,16 +277,16 @@ int isBackgrounfJob(struct command *c){
 	// need to confirm this	<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CHECK THIS
 	if(!strcmp(c->argv[i-1],"&"))
 		return 1;
-	
+
 	// Else not background process
 	return 0;
 }
 
 // Do infinitely
 int main(int argc, char **argv){
-	
+
 	printf("\nWelcome to Simple Shell!\n\n");
-	
+
 	// Disable Tab Completion
 	// rl_bind_key ('\t', rl_insert);
 
@@ -302,7 +301,7 @@ int main(int argc, char **argv){
 
 		char *prompt;
 		prompt = printPrompt();			// prints prompt
-		
+
 		cmdLine = readline(prompt);		// reads input line
 		add_history (cmdLine);			// Stores it in history
 
