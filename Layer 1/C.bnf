@@ -177,7 +177,7 @@
 <DerefExpression>   ::= "*" <PrimaryExpression>
 <AddressExpression> ::= "&" <PrimaryExpression>
 
-<ArrayLookup>  ::= <PrimaryExpression> "[" <PrimaryExpression> "]"
+<ArrayLookup>  ::= <PrimaryExpression> ("[" <PrimaryExpression> "]")*
 
 <StructAccess> ::= <PrimaryExpression> "." <Identifier>
 
@@ -185,4 +185,8 @@
 
 <PrimaryExpression> ::= <Identifier>
                       | "("<Expression>")"
-                    
+                      | <INTEGER_LITERAL>
+                      | <FLOATING_POINT_LITERAL>
+                      | <STRING_LITERAL>
+                      | <CHAR_LITERAL>
+                      
