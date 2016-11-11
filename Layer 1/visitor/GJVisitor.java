@@ -369,12 +369,7 @@ public interface GJVisitor<R,A> {
    public R visit(RightUnary n, A argu);
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public R visit(ExpNew n, A argu);
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public R visit(Expression n, A argu);

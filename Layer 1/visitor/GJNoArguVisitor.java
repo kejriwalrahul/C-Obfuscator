@@ -369,12 +369,7 @@ public interface GJNoArguVisitor<R> {
    public R visit(RightUnary n);
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public R visit(ExpNew n);
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public R visit(Expression n);

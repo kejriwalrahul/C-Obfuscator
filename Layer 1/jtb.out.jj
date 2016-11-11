@@ -1431,31 +1431,16 @@ RightUnary RightUnary() :
    { return new RightUnary(n0); }
 }
 
-ExpNew ExpNew() :
-{
-   NodeOptional n0 = new NodeOptional();
-   ExpressionContd n1;
-
-   
-}
-{
-   (
-      n1=ExpressionContd()
-      { n0.addNode(n1); }
-   )?
-   
-   { return new ExpNew(n0); }
-}
-
 Expression Expression() :
 {
    NodeChoice n0;
    NodeSequence n1;
    PrimaryExpr n2;
-   ExpNew n3;
-   NodeSequence n4;
-   LeftUnary n5;
-   PrimaryExpr n6;
+   NodeOptional n3 = new NodeOptional();
+   ExpressionContd n4;
+   NodeSequence n5;
+   LeftUnary n6;
+   PrimaryExpr n7;
 
    
 }
@@ -1464,16 +1449,19 @@ Expression Expression() :
       { n1 = new NodeSequence(2); }
       n2=PrimaryExpr()
       { n1.addNode(n2); }
-      n3=ExpNew()
+      (
+         n4=ExpressionContd()
+         { n3.addNode(n4); }
+      )?
       { n1.addNode(n3); }
       { n0 = new NodeChoice(n1, 0); }
    |
-      { n4 = new NodeSequence(2); }
-      n5=LeftUnary()
-      { n4.addNode(n5); }
-      n6=PrimaryExpr()
-      { n4.addNode(n6); }
-      { n0 = new NodeChoice(n4, 1); }
+      { n5 = new NodeSequence(2); }
+      n6=LeftUnary()
+      { n5.addNode(n6); }
+      n7=PrimaryExpr()
+      { n5.addNode(n7); }
+      { n0 = new NodeChoice(n5, 1); }
    )
    
    { return new Expression(n0); }

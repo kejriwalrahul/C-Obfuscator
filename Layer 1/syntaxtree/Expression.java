@@ -6,7 +6,7 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> PrimaryExpr() ExpNew()
+ * f0 -> PrimaryExpr() [ ExpressionContd() ]
  *       | LeftUnary() PrimaryExpr()
  */
 public class Expression implements Node {

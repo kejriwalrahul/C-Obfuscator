@@ -369,12 +369,7 @@ public interface GJVoidVisitor<A> {
    public void visit(RightUnary n, A argu);
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public void visit(ExpNew n, A argu);
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public void visit(Expression n, A argu);

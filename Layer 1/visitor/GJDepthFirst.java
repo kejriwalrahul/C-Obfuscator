@@ -652,16 +652,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    }
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public R visit(ExpNew n, A argu) {
-      R _ret=null;
-      n.f0.accept(this, argu);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public R visit(Expression n, A argu) {

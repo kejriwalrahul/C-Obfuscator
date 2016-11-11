@@ -652,16 +652,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public R visit(ExpNew n) {
-      R _ret=null;
-      n.f0.accept(this);
-      return _ret;
-   }
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public R visit(Expression n) {

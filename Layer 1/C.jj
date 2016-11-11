@@ -353,14 +353,10 @@ void RightUnary() : {}
 	| "--"
 }
 
-void ExpNew() : {} 
-{
-	[ExpressionContd()]
-}
 
 void Expression() : {}
 {
-	PrimaryExpr() ExpNew()
+	PrimaryExpr() [ExpressionContd()]
 	| LeftUnary() PrimaryExpr()
 }
 

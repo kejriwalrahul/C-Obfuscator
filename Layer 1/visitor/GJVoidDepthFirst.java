@@ -562,14 +562,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public void visit(ExpNew n, A argu) {
-      n.f0.accept(this, argu);
-   }
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public void visit(Expression n, A argu) {

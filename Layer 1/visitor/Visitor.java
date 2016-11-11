@@ -369,12 +369,7 @@ public interface Visitor {
    public void visit(RightUnary n);
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public void visit(ExpNew n);
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public void visit(Expression n);

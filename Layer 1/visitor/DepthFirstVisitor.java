@@ -552,14 +552,7 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
-    * f0 -> [ ExpressionContd() ]
-    */
-   public void visit(ExpNew n) {
-      n.f0.accept(this);
-   }
-
-   /**
-    * f0 -> PrimaryExpr() ExpNew()
+    * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
    public void visit(Expression n) {
