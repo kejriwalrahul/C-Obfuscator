@@ -16,6 +16,12 @@ public class Translator extends GJNoArguDepthFirst<String> {
    ArrayList<String> entryStack = new ArrayList<String>();
    ArrayList<String> exitStack  = new ArrayList<String>();
    
+   boolean blockUnwind = false;
+   boolean switchUnwind  = false;
+   boolean whileUnwind = false;
+   
+   String caseAccumulator="";
+   
    private static String generateRandom(String aToZ, int size) {
 	    Random rand=new Random();
 	    StringBuilder res=new StringBuilder();
@@ -34,8 +40,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
    String genName(){
 	   while(true){
 		   String s = genNewLabel();
-		   if(!used.contains(s))
+		   if(!used.contains(s)){
+			   used.add(s);
 			   return s;
+		   }
 	   }
    }
    
@@ -63,11 +71,21 @@ public class Translator extends GJNoArguDepthFirst<String> {
    }
 
    public String visit(NodeListOptional n) {
+      boolean flag = blockUnwind;
+      blockUnwind = false;
+      
+      boolean switchflag = switchUnwind;
+
       if ( n.present() ) {
          String _ret="";
          int _count=0;
          for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
+        	 if(switchflag) 	switchUnwind = true;
         	 _ret += e.nextElement().accept(this);
+        	 if(flag){
+        		 String s = genName();
+        		 _ret += "goto " + s + ";" + s + ":";
+        	 }
             _count++;
          }
          return _ret;
@@ -184,9 +202,13 @@ public class Translator extends GJNoArguDepthFirst<String> {
       String _ret="";
       int choice = n.f1.f0.which;
       if(choice == 0 || choice == 1 || choice == 2 || choice == 5)
-    	  pushEntryExit("", n.f2.f2.tokenImage);
+    	  pushEntryExit(n.f0.f0.f0.tokenImage, n.f2.f2.tokenImage);
       
       _ret += n.f0.accept(this);
+      
+      if(choice == 3)	blockUnwind = true;
+      if(choice == 5)	switchUnwind = true;
+      if(choice == 0 || choice == 1 || choice == 2)	whileUnwind = true;
       
       if(choice == 6)
     	  _ret += "goto " + exitStack.get(exitStack.size()-1) + ";";
@@ -197,6 +219,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
       
       if(choice != 11 && choice != 8)
     	  _ret += n.f2.accept(this);
+      
+      popEntryExit();
+      if(choice == 5)	_ret += caseAccumulator;
       return _ret;
    }
 
@@ -493,15 +518,27 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ForLoop n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
-      _ret += n.f6.accept(this);
-      _ret += n.f7.accept(this);
-      _ret += n.f8.accept(this);
+      if(whileUnwind){
+    	  String s1 = genName();
+    	  String s2 = genName();
+    	  String s3 = genName();
+    	  
+    	  _ret += n.f2.accept(this) + "goto " + s1 + ";";
+    	  _ret += s1 + ": if(" + n.f4.accept(this) + ") goto " + s2 + "; else goto " + exitStack.get(exitStack.size()-1) + ";";
+    	  _ret += s1 + ":" + n.f8.accept(this) + "goto " + s3 + ";";
+    	  _ret += s3 + ":" + n.f6.accept(this) + s1  +";";    	  
+      }
+      else{
+          _ret += n.f0.accept(this);
+          _ret += n.f1.accept(this);
+          _ret += n.f2.accept(this);
+          _ret += n.f3.accept(this);
+          _ret += n.f4.accept(this);
+          _ret += n.f5.accept(this);
+          _ret += n.f6.accept(this);
+          _ret += n.f7.accept(this);
+          _ret += n.f8.accept(this);    	  
+      }
       return _ret;
    }
 
@@ -513,13 +550,21 @@ public class Translator extends GJNoArguDepthFirst<String> {
     * f4 -> Statement()
     */
    public String visit(WhileLoop n) {
-      String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      return _ret;
+	  String _ret="";
+	  
+	  if(whileUnwind){
+		  String newLabel = genName();
+		  _ret += "if(" + n.f2.accept(this) + ") goto " + newLabel + "; else goto " + exitStack.get(exitStack.size()-1) + ";";
+		  _ret += newLabel + ":" + n.f4.accept(this) + "goto " + entryStack.get(entryStack.size()-1) + ";";
+	  }
+	  else{
+	      _ret += n.f0.accept(this);
+	      _ret += n.f1.accept(this);
+	      _ret += n.f2.accept(this);
+	      _ret += n.f3.accept(this);
+	      _ret += n.f4.accept(this);  
+	  }
+	  return _ret;
    }
 
    /**
@@ -533,13 +578,26 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(DoWhile n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
-      _ret += n.f6.accept(this);
+      
+      if(whileUnwind){
+    	  String newLabel = genName();
+    	  String oldEntry = entryStack.get(entryStack.size()-1);
+    	  entryStack.add(entryStack.size()-1, newLabel);
+    	  
+    	  _ret += n.f1.accept(this) + "goto " + newLabel + ";";
+    	  _ret += newLabel + ": if(" + n.f4.accept(this) 
+    	  			+ ") goto " + oldEntry
+    	  			+ "; else goto " + exitStack.get(exitStack.size()-1) + ";";	
+      }
+      else{
+          _ret += n.f0.accept(this);
+          _ret += n.f1.accept(this);
+          _ret += n.f2.accept(this);
+          _ret += n.f3.accept(this);
+          _ret += n.f4.accept(this);
+          _ret += n.f5.accept(this);
+          _ret += n.f6.accept(this);
+      }
       return _ret;
    }
 
@@ -636,7 +694,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
     * f6 -> "}"
     */
    public String visit(SwitchStmt n) {
-      String _ret="";
+       boolean flag = switchUnwind;
+	   
+       String _ret="";
       _ret += n.f0.accept(this);
       _ret += n.f1.accept(this);
       _ret += n.f2.accept(this);
@@ -652,8 +712,25 @@ public class Translator extends GJNoArguDepthFirst<String> {
     *       | <DFLT> ":" ( Statement() )*
     */
    public String visit(CaseStmt n) {
-      String _ret="";
-      n.f0.accept(this);
+      boolean flag = switchUnwind;
+      switchUnwind = false;
+	   
+	  String _ret="";
+      if(flag){
+    	  String newLabel = genName();
+    	  int choice = n.f0.which;
+    	  if(choice == 1){
+    		  _ret += "case " + ((Expression)((NodeSequence)n.f0.choice).elementAt(1)).accept(this) + ":" + "goto " + newLabel + ";";
+    		  caseAccumulator += newLabel + ":" + ((NodeListOptional)((NodeSequence)n.f0.choice).elementAt(3)).accept(this) + "goto " + exitStack.get(exitStack.size()-1) + ";";
+    	  }
+    	  else{
+    		  _ret += "default " + ":" + "goto " + newLabel + ";";
+    		  caseAccumulator += newLabel + ":" + ((NodeListOptional)((NodeSequence)n.f0.choice).elementAt(2)).accept(this) + "goto " + exitStack.get(exitStack.size()-1) + ";";
+    	  }
+      }
+      else{
+    	  n.f0.accept(this);    	  
+      }
       return _ret;
    }
 
