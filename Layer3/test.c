@@ -18,10 +18,10 @@ void swap(char *a, char *b)
 	(*b) = temp;
 }
 
-// int compare(const void *a, const void *b)
-// {
-// 	return (*(char *)a - *(char*)b);
-// }
+int compare(void *a, void *b)
+{
+	return ((*((char *)a)) - (*((char*)b)));
+}
 
 void permt(char *arr, int len, int index)
 {

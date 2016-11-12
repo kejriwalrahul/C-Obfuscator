@@ -1,70 +1,66 @@
  void  print ( int * arr , int  size ){
+ int  i ;
 
- Lofonzr:  int  i ;
- goto Lsud8qr;
-
- Lsud8qr:  for ( i  =  0 ; i < size ; i ++ ){
+ Lytr4qn:  for ( i  =  0 ; i < size ; i ++ ){
  printf  (  "%d " , arr  [  i  ]  ) ;
 }
- goto Lfw8ex9;
+ goto Lxvjk60;
 
- Lfw8ex9:  puts  (  ""  ) ;
- goto Lyml53q;
- Lyml53q: ;
+ Lxvjk60:  puts  (  ""  ) ;
+ goto Lsylo4u;
+ Lsylo4u: ;
 }
  void  swap ( char * a , char * b ){
+ char  temp  =  * a ;
 
- Ldleh0i:  char  temp  =  * a ;
- goto Lkzxszh;
+ Lfxhyj9:  (  * a  )  =  * b ;
+ goto La4nlw6;
 
- Lkzxszh:  (  * a  )  =  * b ;
- goto Ll8ekjq;
+ La4nlw6:  (  * b  )  =  temp ;
+ goto Lv4eibz;
+ Lv4eibz: ;
+}
+ int  compare ( void * a , void * b ){
 
- Ll8ekjq:  (  * b  )  =  temp ;
- goto Lgdu534;
- Lgdu534: ;
+ Las3uhq:  return  (  (  * ( ( char *)  a  )  ) - (  * ( ( char *)  b  )  )  ) ;
+ goto Lbk6kt4;
+ Lbk6kt4: ;
 }
  void  permt ( char * arr , int  len , int  index ){
+ int  i  =  0 ;
 
- Lwfgnz0:  int  i  =  0 ;
- goto Ldq0aod;
-
- Ldq0aod: if(  index >= len )
- Ljz8umg: {
+ L4uhwzr: if(  index >= len ){
  puts  (  arr  ) ;
  return ;
 }
- goto Lm1fmh2;
- goto Ljz8umg;
+ goto Loj47y4;
 
- Ljz8umg:  permt  (  arr ,( int )  len , index + 1  ) ;
- goto L5f7fne;
+ Loj47y4:  permt  (  arr ,( int )  len , index + 1  ) ;
+ goto L05mf2o;
 
- L5f7fne:  for ( i  =  index + 1 ; i < len ; i ++ ){
+ L05mf2o:  for ( i  =  index + 1 ; i < len ; i ++ ){
 if(  (  arr  [  index  ]  ) != (  arr  [  i  ]  ) ){
  swap  (  arr + index , arr + i  ) ;
  permt  (  arr , len , index + 1  ) ;
  swap  (  arr + index , arr + i  ) ;
 }
 }
- goto Lgf7hmn;
- Lgf7hmn: ;
+ goto Lcfv16d;
+ Lcfv16d: ;
 }
  int  main (){
+ char  arr [ 100 ];
 
- L2tyfx8:  char  arr [ 100 ];
- goto L9aa63v;
+ Lvr8fqu:  scanf  (  "%s" , arr  ) ;
+ goto L3ipgm7;
 
- L9aa63v:  scanf  (  "%s" , arr  ) ;
- goto Ll1fn5k;
+ L3ipgm7:  qsort  (  arr , strlen  (  arr  ) , 5 , compare  ) ;
+ goto Lauzokj;
 
- Ll1fn5k:  qsort  (  arr , strlen  (  arr  ) , 5 , compare  ) ;
- goto Lhxbyoz;
+ Lauzokj:  permt  (  arr , strlen  (  arr  ) , 0  ) ;
+ goto L0sks54;
 
- Lhxbyoz:  permt  (  arr , strlen  (  arr  ) , 0  ) ;
- goto Lh5vs0i;
-
- Lh5vs0i:  return  0 ;
- goto Lhcgwuo;
- Lhcgwuo: ;
+ L0sks54:  return  0 ;
+ goto Lloqemj;
+ Lloqemj: ;
 }

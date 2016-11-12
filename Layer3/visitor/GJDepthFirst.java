@@ -556,7 +556,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(Statement n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	if ((Integer)argu <= 2) {
+      	if ((Integer)argu <= 2 && n.f0.which != 9 && n.f0.which != 3) {
 	      	System.out.print("\n "+prevLine+": ");
 	      	prevLine = getNewLine();
 	     }
@@ -569,7 +569,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       	} else {
       		n.f0.accept(this, argu);
       	}
-      	if ((Integer)argu <= 2) {
+      	if ((Integer)argu <= 2 && n.f0.which != 9 && n.f0.which != 3) {
       		System.out.println(" goto "+temp+";");
       		prevLine = temp;
       	}
