@@ -1,0 +1,192 @@
+<Goal> ::= <Variables_And_Functions>* <Main> <Variables_And_Functions>* <EOF>
+
+<Variables_And_Function> ::=  <declaration-statement>
+                            | <FunctionDefinition>
+                            | <FunctionDeclaration>
+                            | <StructDeclaration>
+                            | <typedef>
+                            | <EnumDeclaration>
+
+<declaration-statement> ::= <base-type> <object-list> ";"
+
+<FunctionDefinition> ::= <type-specifier> <Identifier> "(" (<ArgList>)? ")" <block>                   
+
+<FunctionDeclaration> ::= <type-specifier> <Identifier> "(" (<ParameterList>)? ")" ";"
+
+<StructDeclaration>  ::= "struct" (<Identifier>)? "{" (<declaration-statement>)* "}" ";"
+
+<typedef> ::= "typedef" <type> <Identifier> ";"
+
+<EnumDeclaration>  ::= "enum" <Identifier> "{" <Identifier> ("," <Identifier>)* "}" ";"  
+
+<Main> ::= <Main_Return_Type> "main" "(" (<int> <Identifier> "," <char>"*" ("*")? <Identifier> ("[" "]")? )? ")" <block>
+
+<type> ::= <base-type> ("*")*    
+    
+<base-type> ::= (<storage-class>)? <type-specifier>
+
+<storage-class>  ::= "static"
+    
+<type-specifier> ::= "int"
+                     | "void"
+                     | "char"
+                     | "short
+                     | "long"
+                     | "float"
+                     | "double"
+                     | "signed"
+                     | "unsigned"
+                     | <Identifier>
+                     | "struct" <Identifier>
+                     | "struct" (<Identifier>)? "{" (<declaration-statement>)* "}"
+                     | "enum" (<Identifier>)? "{" <Identifier> ("," <Identifier>)* "}"
+                
+<ArgList> ::= <Argum> ("," <Argum>)*;
+
+<Argum> ::= <type> <Identifier>
+
+<ParameterList> ::= <ParameterDec> ("," <ParameterDec>)* 
+
+<ParameterDec> ::= <type> (<Identifier>)?
+    
+<Main_Return_Type> ::= <int>
+                     | <void>
+                        
+<object-list> ::= <object-type> ("," <object-type>)*
+                       
+<object-type> ::= ("*")* <Identifier> ("[" <Expression> "]")* ("=" <Expression>)? // Expression should be const expr wtf? array initializer?
+                                      
+<block> ::= "{" <statement-list> "}"
+
+<statement-list> ::= ((<label>)? <statement>)*
+
+<statement> ::= <for-loop>
+            |   <while-loop>
+            |   <do-while-loop>
+            |   <block>
+            |   <if-statement>
+            |   <switch-statement>
+            |   <break-statement>
+            |   <continue-statement>
+            |   <return-statement>
+            |   <Expression> ";"
+            |   <goto-statement>
+            |   <declaration-statement>
+            |   ";"    // empty statement . is this really needed?
+
+<goto-statement> ::= "goto" <label> ";"
+
+<for-loop> ::= "for" "(" <Expression> ";" <Expression> ";" <Expression> ")" <statement>
+
+<while-loop> ::= "while" "(" <Expression> ")" <statement>
+
+<do-while-loop> ::= "do" <statement> "while" "(" <Expression> ")" ";"
+
+<break-statement> ::= "break" ";"
+
+<continue-statement> ::= "continue" ";"
+
+<return-statement> ::= "return" (<Expression>)? ";"
+
+<if-statement> ::= <if-then-statment>
+                 | <if-then-else-statement>
+                
+<if-then-statement>    ::=    "if" "(" <Expression> ")" <statement>
+
+<if-then-else-statement> ::= "if" "(" <Expression> ")" <statement> "else" <statement>
+
+<switch-statement> ::= "switch" "(" <Expression> ")" "{" (<case-statement>)* "}"
+
+<case-statement> ::= "case" <Expression> ":" (<statement>)*
+                   | "default" ":" (<statement>)*
+               
+<label> ::= <Identifier> ":"         
+
+<Expression>  ::=    <OrExpression>
+                |    <AndExpression>
+                |    <LtExpression>
+                |    <LeqExpression>
+                |    <GtExpression>
+                |    <GeqExpression>
+                |    <CmpeqExpression>
+                |    <NeqExpression>
+                |    <PlusExpression>
+                |    <MinusExpression>
+                |    <TimesExpression>
+                |    <DivExpression>
+                |    <BitwiseAndExpression>
+                |    <BitwiseOrExpression>
+                |    <BitwiseXorExpression>
+                |    <BitwiseNotExpression>
+                |    <LeftShiftExpression>
+                |    <RightShiftExpression>
+                |    <ModExpression>
+                |    <ArrayLookup>
+                |    <StructAccess>
+                |    <StructPtrAccess>
+                |    <TernaryExpression>
+                |    <AssignmentExpression>
+                |    <PrimaryExpression>
+                |    <AddressExpression>
+                |    <Expression> ("," <Expression>)+
+
+<AssignmentExpression> ::= <Expression> "="  <Expression>
+                         | <Expression> "+=" <Expression>
+                         | <Expression> "-=" <Expression>
+                         | <Expression> "*=" <Expression>
+                         | <Expression> "/=" <Expression>
+                         | <Expression> "%=" <Expression>
+                         | <Expression> "<<="<Expression>
+                         | <Expression> ">>="<Expression>
+                         | <Expression> "&=" <Expression>
+                         | <Expression> "^=" <Expression>
+                         | <Expression> "|=" <Expression>                         
+                                                                 
+<TernaryExpression> ::= <Expression> "?" <Expression> ":" <Expression>             
+                
+<OrExpression>    ::= <PrimaryExpression> "||" <PrimaryExpression>
+<AndExpression>   ::= <PrimaryExpression> "&&" <PrimaryExpression>
+
+<LtExpression>    ::= <PrimaryExpression> "<"  <PrimaryExpression>
+<LeqExpression>   ::= <PrimaryExpression> "<=" <PrimaryExpression>
+<GtExpression>    ::= <PrimaryExpression> ">"  <PrimaryExpression>
+<GeqExpression>   ::= <PrimaryExpression> ">=" <PrimaryExpression>
+<CmpeqExpression> ::= <PrimaryExpression> "==" <PrimaryExpression>
+<NeqExpression>   ::= <PrimaryExpression> "!=" <PrimaryExpression>
+
+<PlusExpression>  ::= <PrimaryExpression> "+"  <PrimaryExpression>
+<MinusExpression> ::= <PrimaryExpression> "-"  <PrimaryExpression>
+<TimesExpression> ::= <PrimaryExpression> "*"  <PrimaryExpression>
+<DivExpression>   ::= <PrimaryExpression> "/"  <PrimaryExpression>
+<ModExpression>   ::= <PrimaryExpression> "%"  <PrimaryExpression>
+
+<BitwiseAndExpression>   ::=  <PrimaryExpression> "&" <PrimaryExpression>
+<BitwiseOrExpression>    ::=  <PrimaryExpression> "|" <PrimaryExpression>
+<BitwiseXorExpression>   ::=  <PrimaryExpression> "^" <PrimaryExpression>
+<BitwiseNotExpression>   ::=  "~" <PrimaryExpression>
+
+<LeftShiftExpression>    ::= <PrimaryExpression> "<<" <PrimaryExpression>
+<RightShiftExpression>   ::= <PrimaryExpression> ">>" <PrimaryExpression>
+
+<PreIncExpression>  ::= "++" <PrimaryExpression>
+<PostIncExpression> ::= <PrimaryExpression> "++"
+<PreDecExpression>  ::= "--" <PrimaryExpression>
+<PostDecExpression> ::= <PrimaryExpression> "--"
+<NotExpression>     ::= "!" <PrimaryExpression>
+
+<DerefExpression>   ::= "*" <PrimaryExpression>
+<AddressExpression> ::= "&" <PrimaryExpression>
+
+<ArrayLookup>  ::= <PrimaryExpression> ("[" <PrimaryExpression> "]")*
+
+<StructAccess> ::= <PrimaryExpression> "." <Identifier>
+
+<StructPtrAccess> ::= <PrimaryExpression> "->" <Identifier>
+
+<PrimaryExpression> ::= <Identifier>
+                      | "("<Expression>")"
+                      | <INTEGER_LITERAL>
+                      | <FLOATING_POINT_LITERAL>
+                      | <STRING_LITERAL>
+                      | <CHAR_LITERAL>
+                      

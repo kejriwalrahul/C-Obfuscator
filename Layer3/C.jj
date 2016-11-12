@@ -1,0 +1,468 @@
+PARSER_BEGIN(CParser)
+  public class CParser {}
+PARSER_END(CParser)
+
+SKIP : {
+ " "
+|  "\t"
+|  "\n"
+|  "\r"
+|  <"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")>
+|  <"/*" (~["*"])* "*" ("*" | ~["*","/"] (~["*"])* "*")* "/">
+| "#" : PREPROCESSOR_OUTPUT
+}
+
+<PREPROCESSOR_OUTPUT> SKIP:
+{
+     "\n" : DEFAULT
+}
+
+<PREPROCESSOR_OUTPUT> MORE:
+{
+ "\\\n"
+ |
+ "\\\r\n"
+ |
+ < ~[] >
+}
+
+TOKEN : {
+ <INTEGER_LITERAL: <DECIMAL_LITERAL> (["l","L"])? | <HEX_LITERAL> (["l","L"])? | <OCTAL_LITERAL> (["l","L"])?>
+|  <#DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])*>
+|  <#HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+>
+|  <#OCTAL_LITERAL: "0" (["0"-"7"])*>
+|  <FLOATING_POINT_LITERAL: (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])? | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])? | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])? | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]>
+|  <#EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+>
+|  <CHARACTER_LITERAL: "\'" (~["\'","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])) "\'">
+|  <STRING_LITERAL: "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])?  | ["0"-"3"] ["0"-"7"] ["0"-"7"] | ( ["\n","\r"] | "\r\n")))* "\"">
+}
+
+TOKEN : {
+	<CONTINUE: "continue"> |
+	<VOLATILE: "volatile"> |
+	<REGISTER: "register"> |
+	<UNSIGNED: "unsigned"> |
+	<TYPEDEF: "typedef"> |
+	<DFLT: "default"> |
+	<DOUBLE: "double"> |
+	<SWITCH: "switch"> |
+	<RETURN: "return"> |
+	<EXTERN: "extern"> |
+	<STRUCT: "struct"> |
+	<STATIC: "static"> |
+	<SIGNED: "signed"> |
+	<WHILE: "while"> |
+	<BREAK: "break"> |
+	<UNION: "union"> |
+	<CONST: "const"> |
+	<FLOAT: "float"> |
+	<SHORT: "short"> |
+	<ELSE: "else"> |
+	<CASE: "case"> |
+	<LONG: "long"> |
+	<ENUM: "enum"> |
+	<AUTO: "auto"> |
+	<VOID: "void"> |
+	<CHAR: "char"> |
+	<GOTO: "goto"> |
+	<FOR: "for"> |
+	<INT: "int"> |
+	<IF: "if"> |
+	<DO: "do"> |
+	<MAIN: "main">
+}
+TOKEN : {
+ <IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)*>
+|  <#LETTER: ["$","A"-"Z","_","a"-"z"]>
+|  <#DIGIT: ["0"-"9"]>
+}
+
+void Goal() : {}
+{
+	(LOOKAHEAD(2) VariablesAndFunctions())*
+	PMain()
+	(VariablesAndFunctions())*
+	<EOF>
+}
+
+void VariablesAndFunctions() : {}
+{
+	LOOKAHEAD(DeclarationStmt()) DeclarationStmt()
+	| LOOKAHEAD(FunctionDeclaration()) FunctionDeclaration() 
+	| LOOKAHEAD(StructDeclaration()) StructDeclaration()
+	| LOOKAHEAD(EnumDeclaration()) EnumDeclaration() 
+	| FunctionDefinition()
+	| TypeDef()
+}
+
+void DeclarationStmt(): {}
+{
+	BaseType() ObjectList() ";"
+}
+
+void FunctionDefinition() : {}
+{
+	Type()
+	Identifier()
+	"(" [ArgList()] ")"
+	Block()
+}
+
+void FunctionDeclaration() : {}
+{
+	Type()
+	Identifier()
+	"(" [ParameterList()] ")"
+	";"
+}
+
+void ParameterList() : {}
+{
+	ParameterDeclaration() ("," ParameterDeclaration())*
+}
+
+void ParameterDeclaration() : {}
+{
+	Type() [Identifier()]
+}
+
+void StructDeclaration() : {}
+{
+	<STRUCT> [Identifier()] "{"
+	(DeclarationStmt())* "}" ";"
+}
+
+void TypeDef(): {}
+{
+	<TYPEDEF> Type()
+	Identifier() ";"
+}
+
+void EnumDeclaration() : {}
+{
+	<ENUM> Identifier()
+	"{" Identifier() ("," Identifier())* "}" ";"
+}
+
+void PMain(): {}
+{
+	MainReturnType() <MAIN> "("
+	[<INT> Identifier() "," <CHAR> "*" ["*"] Identifier() ["[" "]"]] ")"
+	Block()
+}
+
+void Type() : {}
+{
+	BaseType()
+	("*")*
+}
+
+void BaseType() : {}
+{
+	[StorageClass()]
+	TypeSpecifier()
+}
+
+void StorageClass() : {}
+{
+	<STATIC>
+}
+
+void TypeSpecifier() : {}
+{
+	<INT>
+	| <VOID>
+	| <CHAR>
+	| <SHORT>
+	| <LONG>
+	| <FLOAT>
+	| <DOUBLE>
+	| <SIGNED>
+	| <UNSIGNED>
+	| Identifier()
+	| <STRUCT> [LOOKAHEAD(Identifier()) Identifier()] ["{" (DeclarationStmt())* "}"]
+	| <ENUM> [Identifier()] "{" Identifier() ("," Identifier())* "}"
+}
+
+void ArgList() : {}
+{
+	Arg()
+	("," Arg())*
+}
+
+void Arg() : {}
+{
+	Type()
+	[Identifier()]
+}
+
+void MainReturnType() : {}
+{
+	<INT>
+	| <VOID>
+}
+
+void ObjectList() : {}
+{
+	ObjectType()
+	("," ObjectType())*
+}
+
+void ObjectType() : {}
+{
+	("*")*
+	Identifier()
+	("[" Expression() "]")*
+	["=" Expression()]
+}
+
+void Block() : {}
+{
+	"{" StatementList() "}"
+}
+
+void StatementList() : {}
+{
+	([LOOKAHEAD(2) Label()] Statement())*
+}
+
+void Statement() : {}
+{
+	ForLoop()
+	| WhileLoop()
+	| DoWhile()
+	| Block()
+	| IfStmt()
+	| SwitchStmt()
+	| BreakStmt()
+	| ContinueStmt()
+	| ReturnStmt()
+	| LOOKAHEAD(DeclarationStmt()) DeclarationStmt()
+	| Expression() ";"
+	| GotoStmt()
+	| ";"
+}
+
+void GotoStmt() : {}
+{
+	<GOTO> Label() ";"
+}
+
+void ForLoop() : {}
+{
+	<FOR> "(" Expression() ";" Expression() ";" Expression() ")" Statement()
+}
+
+void WhileLoop() : {}
+{
+	<WHILE> "(" Expression() ")" Statement()
+}
+
+void DoWhile() : {}
+{
+	<DO> Statement() <WHILE> "(" Expression() ")" ";"
+} 
+
+void BreakStmt() : {}
+{
+	<BREAK> ";"
+}
+
+void ContinueStmt() : {}
+{
+	<CONTINUE> ";"	
+}
+
+void ReturnStmt() : {}
+{
+	<RETURN> [Expression()] ";"
+}
+
+void IfStmt() : {}
+{
+	LOOKAHEAD(IfThenElseStmt()) IfThenElseStmt()
+	| IfThenStmt()
+}
+
+void IfThenStmt() : {}
+{
+	<IF> "(" Expression() ")" Statement()
+}
+
+void IfThenElseStmt() : {}
+{
+	<IF> "(" Expression() ")" Statement() <ELSE> Statement()	
+}
+
+void SwitchStmt() : {}
+{
+	<SWITCH> "(" Expression() ")" "{" (CaseStmt())* "}"
+}
+
+void CaseStmt() : {}
+{
+	<CASE> Expression() ":" (Statement())*
+	| <DFLT> ":" (Statement())*
+}
+
+void Label() : {}
+{
+	Identifier() ":"
+}
+
+void BinOp() : {}
+{
+	Ops() PrimaryExpr()
+}
+
+void Ops() : {}
+{
+	"||"
+	| "&&"
+	| "<"
+	| "<="
+	| ">"
+	| ">="
+	| "=="
+	| "!="
+	| "+"
+	| "-"
+	| "*"
+	| "/"
+	| "%"
+	| "&"
+	| "|"
+	| "^"
+	| "<<"
+	| ">>"
+}
+
+void LeftUnary() : {}
+{
+	"++"
+	| "!"
+	| "--"
+	| "~"
+	| "*"
+	| "&"
+	| "+"
+	| "-"
+	| "(" Type() ")"
+}
+
+void RightUnary() : {}
+{
+	"++"
+	| "--"
+}
+
+
+void Expression() : {}
+{
+	LOOKAHEAD(PrimaryExpr()) PrimaryExpr() [ExpressionContd()]
+	| LeftUnary() PrimaryExpr()
+}
+
+void ExpressionContd() : {}
+{
+	RHSAssignExpr()
+	| "(" [Expression() ("," Expression())*] ")" 
+	| BinOp() 
+	| RightUnary()
+	| StructExpr()
+	| ArrayLookup() 
+	| TernaryExpr()
+}
+
+/*
+void Expression() : {}
+{
+	LOOKAHEAD(AssignExpr())  AssignExpr() 
+	| LOOKAHEAD(BinOp()) BinOp() 
+	| LOOKAHEAD(PrimaryExpr()) PrimaryExpr() RightUnary()
+	| LOOKAHEAD(StructExpr())  StructExpr()
+	| LOOKAHEAD(ArrayLookup()) ArrayLookup() 
+	| LOOKAHEAD(TernaryExpr()) TernaryExpr()
+	| PrimaryExpr()
+	| LeftUnary() PrimaryExpr()
+}
+*/
+
+
+void RHSAssignExpr() : {}
+{
+	"=" Expression()
+	| "+=" Expression()
+	| "-=" Expression()
+	| "*=" Expression()
+	| "/=" Expression()
+	| "%=" Expression()
+	| "<<=" Expression()
+	| ">>=" Expression()
+	| "&=" Expression()
+	| "^=" Expression()
+	| "|=" Expression()
+}
+
+/*
+void AssignExpr() : {}
+{
+	PrimaryExpr() RHSAssignExpr()
+}
+*/
+
+void TernaryExpr() : {}
+{
+	"?" Expression() ":" Expression() 
+}
+
+void ArrayLookup() : {}
+{
+	("[" PrimaryExpr() "]")+
+}
+
+void StructExpr() : {}
+{
+	StructOps() Identifier()	
+}
+
+void StructOps() : {}
+{
+	"->"
+	| "." 	
+}
+
+void PrimaryExpr() : {}
+{
+	Identifier()
+	| "(" Expression() ")"
+	| IntegerLiteral()
+	| FloatingLiteral()
+	| StringLiteral()
+	| CharLiteral()
+}
+
+void CharLiteral() : {}
+{
+	<CHARACTER_LITERAL>
+}
+
+void FloatingLiteral() : {}
+{
+	<FLOATING_POINT_LITERAL>
+}
+
+void StringLiteral() : {} 
+{
+	<STRING_LITERAL>
+}
+
+void Identifier() : {}
+{
+	<IDENTIFIER>
+}
+
+void IntegerLiteral() : {}
+{
+	<INTEGER_LITERAL>
+}
