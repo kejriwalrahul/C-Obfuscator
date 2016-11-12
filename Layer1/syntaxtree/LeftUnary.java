@@ -9,9 +9,12 @@ package syntaxtree;
  * f0 -> "++"
  *       | "!"
  *       | "--"
+ *       | "-"
+ *       | "+"
  *       | "~"
  *       | "*"
  *       | "&"
+ *       | "(" Type() ")"
  */
 public class LeftUnary implements Node {
    public NodeChoice f0;

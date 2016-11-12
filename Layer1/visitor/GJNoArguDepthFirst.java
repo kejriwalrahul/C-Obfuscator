@@ -104,7 +104,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
@@ -123,7 +123,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
@@ -631,9 +631,12 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * f0 -> "++"
     *       | "!"
     *       | "--"
+    *       | "-"
+    *       | "+"
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "(" Type() ")"
     */
    public R visit(LeftUnary n) {
       R _ret=null;

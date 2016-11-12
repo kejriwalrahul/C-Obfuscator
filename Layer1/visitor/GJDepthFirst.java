@@ -10,42 +10,52 @@ import java.util.*;
  * Provides default methods which visit each node in the tree in depth-first
  * order.  Your visitors may extend this class.
  */
-public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
+public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    //
    // Auto class visitors--probably don't need to be overridden.
    //
-   public void visit(NodeList n, A argu) {
+   public R visit(NodeList n, A argu) {
+      R _ret=null;
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
          e.nextElement().accept(this,argu);
          _count++;
       }
+      return _ret;
    }
 
-   public void visit(NodeListOptional n, A argu) {
+   public R visit(NodeListOptional n, A argu) {
       if ( n.present() ) {
+         R _ret=null;
          int _count=0;
          for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
             e.nextElement().accept(this,argu);
             _count++;
          }
+         return _ret;
       }
+      else
+         return null;
    }
 
-   public void visit(NodeOptional n, A argu) {
+   public R visit(NodeOptional n, A argu) {
       if ( n.present() )
-         n.node.accept(this,argu);
+         return n.node.accept(this,argu);
+      else
+         return null;
    }
 
-   public void visit(NodeSequence n, A argu) {
+   public R visit(NodeSequence n, A argu) {
+      R _ret=null;
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
          e.nextElement().accept(this,argu);
          _count++;
       }
+      return _ret;
    }
 
-   public void visit(NodeToken n, A argu) {}
+   public R visit(NodeToken n, A argu) { return null; }
 
    //
    // User-generated visitor methods below
@@ -57,11 +67,13 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f2 -> ( VariablesAndFunctions() )*
     * f3 -> <EOF>
     */
-   public void visit(Goal n, A argu) {
+   public R visit(Goal n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -72,8 +84,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | FunctionDefinition()
     *       | TypeDef()
     */
-   public void visit(VariablesAndFunctions n, A argu) {
+   public R visit(VariablesAndFunctions n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -81,62 +95,72 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f1 -> ObjectList()
     * f2 -> ";"
     */
-   public void visit(DeclarationStmt n, A argu) {
+   public R visit(DeclarationStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
+      return _ret;
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
     * f4 -> ")"
     * f5 -> Block()
     */
-   public void visit(FunctionDefinition n, A argu) {
+   public R visit(FunctionDefinition n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
+      return _ret;
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
     * f4 -> ")"
     * f5 -> ";"
     */
-   public void visit(FunctionDeclaration n, A argu) {
+   public R visit(FunctionDeclaration n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> ParameterDeclaration()
     * f1 -> ( "," ParameterDeclaration() )*
     */
-   public void visit(ParameterList n, A argu) {
+   public R visit(ParameterList n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> Type()
     * f1 -> [ Identifier() ]
     */
-   public void visit(ParameterDeclaration n, A argu) {
+   public R visit(ParameterDeclaration n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -147,13 +171,15 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f4 -> "}"
     * f5 -> ";"
     */
-   public void visit(StructDeclaration n, A argu) {
+   public R visit(StructDeclaration n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -162,11 +188,13 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f2 -> Identifier()
     * f3 -> ";"
     */
-   public void visit(TypeDef n, A argu) {
+   public R visit(TypeDef n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -178,7 +206,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f5 -> "}"
     * f6 -> ";"
     */
-   public void visit(EnumDeclaration n, A argu) {
+   public R visit(EnumDeclaration n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
@@ -186,6 +215,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
       n.f6.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -196,38 +226,46 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f4 -> ")"
     * f5 -> Block()
     */
-   public void visit(PMain n, A argu) {
+   public R visit(PMain n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> BaseType()
     * f1 -> ( "*" )*
     */
-   public void visit(Type n, A argu) {
+   public R visit(Type n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> [ StorageClass() ]
     * f1 -> TypeSpecifier()
     */
-   public void visit(BaseType n, A argu) {
+   public R visit(BaseType n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> <STATIC>
     */
-   public void visit(StorageClass n, A argu) {
+   public R visit(StorageClass n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -244,43 +282,53 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | <STRUCT> [ Identifier() ] [ "{" ( DeclarationStmt() )* "}" ]
     *       | <ENUM> [ Identifier() ] "{" Identifier() ( "," Identifier() )* "}"
     */
-   public void visit(TypeSpecifier n, A argu) {
+   public R visit(TypeSpecifier n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> Arg()
     * f1 -> ( "," Arg() )*
     */
-   public void visit(ArgList n, A argu) {
+   public R visit(ArgList n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> Type()
     * f1 -> [ Identifier() ]
     */
-   public void visit(Arg n, A argu) {
+   public R visit(Arg n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> <INT>
     *       | <VOID>
     */
-   public void visit(MainReturnType n, A argu) {
+   public R visit(MainReturnType n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> ObjectType()
     * f1 -> ( "," ObjectType() )*
     */
-   public void visit(ObjectList n, A argu) {
+   public R visit(ObjectList n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -289,11 +337,13 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f2 -> ( "[" Expression() "]" )*
     * f3 -> [ "=" Expression() ]
     */
-   public void visit(ObjectType n, A argu) {
+   public R visit(ObjectType n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -301,17 +351,21 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f1 -> StatementList()
     * f2 -> "}"
     */
-   public void visit(Block n, A argu) {
+   public R visit(Block n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> ( [ Label() ] Statement() )*
     */
-   public void visit(StatementList n, A argu) {
+   public R visit(StatementList n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -329,8 +383,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | GotoStmt()
     *       | ";"
     */
-   public void visit(Statement n, A argu) {
+   public R visit(Statement n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -338,10 +394,12 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f1 -> Label()
     * f2 -> ";"
     */
-   public void visit(GotoStmt n, A argu) {
+   public R visit(GotoStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -355,7 +413,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f7 -> ")"
     * f8 -> Statement()
     */
-   public void visit(ForLoop n, A argu) {
+   public R visit(ForLoop n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
@@ -365,6 +424,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.f6.accept(this, argu);
       n.f7.accept(this, argu);
       n.f8.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -374,12 +434,14 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f3 -> ")"
     * f4 -> Statement()
     */
-   public void visit(WhileLoop n, A argu) {
+   public R visit(WhileLoop n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -391,7 +453,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f5 -> ")"
     * f6 -> ";"
     */
-   public void visit(DoWhile n, A argu) {
+   public R visit(DoWhile n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
@@ -399,24 +462,29 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
       n.f6.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> <BREAK>
     * f1 -> ";"
     */
-   public void visit(BreakStmt n, A argu) {
+   public R visit(BreakStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> <CONTINUE>
     * f1 -> ";"
     */
-   public void visit(ContinueStmt n, A argu) {
+   public R visit(ContinueStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -424,18 +492,22 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f1 -> [ Expression() ]
     * f2 -> ";"
     */
-   public void visit(ReturnStmt n, A argu) {
+   public R visit(ReturnStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> IfThenElseStmt()
     *       | IfThenStmt()
     */
-   public void visit(IfStmt n, A argu) {
+   public R visit(IfStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -445,12 +517,14 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f3 -> ")"
     * f4 -> Statement()
     */
-   public void visit(IfThenStmt n, A argu) {
+   public R visit(IfThenStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -462,7 +536,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f5 -> <ELSE>
     * f6 -> Statement()
     */
-   public void visit(IfThenElseStmt n, A argu) {
+   public R visit(IfThenElseStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
@@ -470,6 +545,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
       n.f6.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -481,7 +557,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f5 -> ( CaseStmt() )*
     * f6 -> "}"
     */
-   public void visit(SwitchStmt n, A argu) {
+   public R visit(SwitchStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
@@ -489,32 +566,39 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
       n.f6.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> <CASE> Expression() ":" ( Statement() )*
     *       | <DFLT> ":" ( Statement() )*
     */
-   public void visit(CaseStmt n, A argu) {
+   public R visit(CaseStmt n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> Identifier()
     * f1 -> ":"
     */
-   public void visit(Label n, A argu) {
+   public R visit(Label n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> Ops()
     * f1 -> PrimaryExpr()
     */
-   public void visit(BinOp n, A argu) {
+   public R visit(BinOp n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -537,36 +621,47 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | "<<"
     *       | ">>"
     */
-   public void visit(Ops n, A argu) {
+   public R visit(Ops n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> "++"
     *       | "!"
     *       | "--"
+    *       | "-"
+    *       | "+"
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "(" Type() ")"
     */
-   public void visit(LeftUnary n, A argu) {
+   public R visit(LeftUnary n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> "++"
     *       | "--"
     */
-   public void visit(RightUnary n, A argu) {
+   public R visit(RightUnary n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
-   public void visit(Expression n, A argu) {
+   public R visit(Expression n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -578,8 +673,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | ArrayLookup()
     *       | TernaryExpr()
     */
-   public void visit(ExpressionContd n, A argu) {
+   public R visit(ExpressionContd n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -595,8 +692,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | "^=" Expression()
     *       | "|=" Expression()
     */
-   public void visit(RHSAssignExpr n, A argu) {
+   public R visit(RHSAssignExpr n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -605,35 +704,43 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * f2 -> ":"
     * f3 -> Expression()
     */
-   public void visit(TernaryExpr n, A argu) {
+   public R visit(TernaryExpr n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> ( "[" PrimaryExpr() "]" )+
     */
-   public void visit(ArrayLookup n, A argu) {
+   public R visit(ArrayLookup n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> StructOps()
     * f1 -> Identifier()
     */
-   public void visit(StructExpr n, A argu) {
+   public R visit(StructExpr n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> "->"
     *       | "."
     */
-   public void visit(StructOps n, A argu) {
+   public R visit(StructOps n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -644,15 +751,19 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | <STRING_LITERAL>
     *       | <CHARACTER_LITERAL>
     */
-   public void visit(PrimaryExpr n, A argu) {
+   public R visit(PrimaryExpr n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> <IDENTIFIER>
     */
-   public void visit(Identifier n, A argu) {
+   public R visit(Identifier n, A argu) {
+      R _ret=null;
       n.f0.accept(this, argu);
+      return _ret;
    }
 
 }

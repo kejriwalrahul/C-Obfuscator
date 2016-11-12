@@ -13,7 +13,7 @@
 
 float * AllocFloatArray(float *array, int npts)
 {
-  array = (float *) calloc (npts, sizeof(float));
+  array = (float *) (calloc (npts, sizeof(floatx)));
   if (array == NULL) {
     printf("unable to allocate Float array \n");
     _exit(-1);
@@ -30,10 +30,14 @@ float * AllocFloatArray(float *array, int npts)
 
 int *AllocIntArray(int *array, int npts)
 {
-  array = (int *) calloc(npts,sizeof(int));
+  array = (int *) (calloc(npts,sizeof(intx)));
   if (array == NULL) {
     printf("unable to allocate Int array \n");
     _exit(-1);
   }
   return(array);
 }	/*  End of AllocIntArray  */
+
+int main(){
+  return 0;
+}

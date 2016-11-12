@@ -7,20 +7,20 @@ import syntaxtree.*;
 import java.util.*;
 
 /**
- * All GJ visitors with no argument must implement this interface.
+ * All void visitors must implement this interface.
  */
 
-public interface GJNoArguVisitor<R> {
+public interface Visitor {
 
    //
-   // GJ Auto class visitors with no argument
+   // void Auto class visitors
    //
 
-   public R visit(NodeList n);
-   public R visit(NodeListOptional n);
-   public R visit(NodeOptional n);
-   public R visit(NodeSequence n);
-   public R visit(NodeToken n);
+   public void visit(NodeList n);
+   public void visit(NodeListOptional n);
+   public void visit(NodeOptional n);
+   public void visit(NodeSequence n);
+   public void visit(NodeToken n);
 
    //
    // User-generated visitor methods below
@@ -32,7 +32,7 @@ public interface GJNoArguVisitor<R> {
     * f2 -> ( VariablesAndFunctions() )*
     * f3 -> <EOF>
     */
-   public R visit(Goal n);
+   public void visit(Goal n);
 
    /**
     * f0 -> DeclarationStmt()
@@ -42,46 +42,46 @@ public interface GJNoArguVisitor<R> {
     *       | FunctionDefinition()
     *       | TypeDef()
     */
-   public R visit(VariablesAndFunctions n);
+   public void visit(VariablesAndFunctions n);
 
    /**
     * f0 -> BaseType()
     * f1 -> ObjectList()
     * f2 -> ";"
     */
-   public R visit(DeclarationStmt n);
+   public void visit(DeclarationStmt n);
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
     * f4 -> ")"
     * f5 -> Block()
     */
-   public R visit(FunctionDefinition n);
+   public void visit(FunctionDefinition n);
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
     * f4 -> ")"
     * f5 -> ";"
     */
-   public R visit(FunctionDeclaration n);
+   public void visit(FunctionDeclaration n);
 
    /**
     * f0 -> ParameterDeclaration()
     * f1 -> ( "," ParameterDeclaration() )*
     */
-   public R visit(ParameterList n);
+   public void visit(ParameterList n);
 
    /**
     * f0 -> Type()
     * f1 -> [ Identifier() ]
     */
-   public R visit(ParameterDeclaration n);
+   public void visit(ParameterDeclaration n);
 
    /**
     * f0 -> <STRUCT>
@@ -91,7 +91,7 @@ public interface GJNoArguVisitor<R> {
     * f4 -> "}"
     * f5 -> ";"
     */
-   public R visit(StructDeclaration n);
+   public void visit(StructDeclaration n);
 
    /**
     * f0 -> <TYPEDEF>
@@ -99,7 +99,7 @@ public interface GJNoArguVisitor<R> {
     * f2 -> Identifier()
     * f3 -> ";"
     */
-   public R visit(TypeDef n);
+   public void visit(TypeDef n);
 
    /**
     * f0 -> <ENUM>
@@ -110,7 +110,7 @@ public interface GJNoArguVisitor<R> {
     * f5 -> "}"
     * f6 -> ";"
     */
-   public R visit(EnumDeclaration n);
+   public void visit(EnumDeclaration n);
 
    /**
     * f0 -> MainReturnType()
@@ -120,24 +120,24 @@ public interface GJNoArguVisitor<R> {
     * f4 -> ")"
     * f5 -> Block()
     */
-   public R visit(PMain n);
+   public void visit(PMain n);
 
    /**
     * f0 -> BaseType()
     * f1 -> ( "*" )*
     */
-   public R visit(Type n);
+   public void visit(Type n);
 
    /**
     * f0 -> [ StorageClass() ]
     * f1 -> TypeSpecifier()
     */
-   public R visit(BaseType n);
+   public void visit(BaseType n);
 
    /**
     * f0 -> <STATIC>
     */
-   public R visit(StorageClass n);
+   public void visit(StorageClass n);
 
    /**
     * f0 -> <INT>
@@ -153,31 +153,31 @@ public interface GJNoArguVisitor<R> {
     *       | <STRUCT> [ Identifier() ] [ "{" ( DeclarationStmt() )* "}" ]
     *       | <ENUM> [ Identifier() ] "{" Identifier() ( "," Identifier() )* "}"
     */
-   public R visit(TypeSpecifier n);
+   public void visit(TypeSpecifier n);
 
    /**
     * f0 -> Arg()
     * f1 -> ( "," Arg() )*
     */
-   public R visit(ArgList n);
+   public void visit(ArgList n);
 
    /**
     * f0 -> Type()
     * f1 -> [ Identifier() ]
     */
-   public R visit(Arg n);
+   public void visit(Arg n);
 
    /**
     * f0 -> <INT>
     *       | <VOID>
     */
-   public R visit(MainReturnType n);
+   public void visit(MainReturnType n);
 
    /**
     * f0 -> ObjectType()
     * f1 -> ( "," ObjectType() )*
     */
-   public R visit(ObjectList n);
+   public void visit(ObjectList n);
 
    /**
     * f0 -> ( "*" )*
@@ -185,19 +185,19 @@ public interface GJNoArguVisitor<R> {
     * f2 -> ( "[" Expression() "]" )*
     * f3 -> [ "=" Expression() ]
     */
-   public R visit(ObjectType n);
+   public void visit(ObjectType n);
 
    /**
     * f0 -> "{"
     * f1 -> StatementList()
     * f2 -> "}"
     */
-   public R visit(Block n);
+   public void visit(Block n);
 
    /**
     * f0 -> ( [ Label() ] Statement() )*
     */
-   public R visit(StatementList n);
+   public void visit(StatementList n);
 
    /**
     * f0 -> ForLoop()
@@ -214,14 +214,14 @@ public interface GJNoArguVisitor<R> {
     *       | GotoStmt()
     *       | ";"
     */
-   public R visit(Statement n);
+   public void visit(Statement n);
 
    /**
     * f0 -> <GOTO>
     * f1 -> Label()
     * f2 -> ";"
     */
-   public R visit(GotoStmt n);
+   public void visit(GotoStmt n);
 
    /**
     * f0 -> <FOR>
@@ -234,7 +234,7 @@ public interface GJNoArguVisitor<R> {
     * f7 -> ")"
     * f8 -> Statement()
     */
-   public R visit(ForLoop n);
+   public void visit(ForLoop n);
 
    /**
     * f0 -> <WHILE>
@@ -243,7 +243,7 @@ public interface GJNoArguVisitor<R> {
     * f3 -> ")"
     * f4 -> Statement()
     */
-   public R visit(WhileLoop n);
+   public void visit(WhileLoop n);
 
    /**
     * f0 -> <DO>
@@ -254,32 +254,32 @@ public interface GJNoArguVisitor<R> {
     * f5 -> ")"
     * f6 -> ";"
     */
-   public R visit(DoWhile n);
+   public void visit(DoWhile n);
 
    /**
     * f0 -> <BREAK>
     * f1 -> ";"
     */
-   public R visit(BreakStmt n);
+   public void visit(BreakStmt n);
 
    /**
     * f0 -> <CONTINUE>
     * f1 -> ";"
     */
-   public R visit(ContinueStmt n);
+   public void visit(ContinueStmt n);
 
    /**
     * f0 -> <RETURN>
     * f1 -> [ Expression() ]
     * f2 -> ";"
     */
-   public R visit(ReturnStmt n);
+   public void visit(ReturnStmt n);
 
    /**
     * f0 -> IfThenElseStmt()
     *       | IfThenStmt()
     */
-   public R visit(IfStmt n);
+   public void visit(IfStmt n);
 
    /**
     * f0 -> <IF>
@@ -288,7 +288,7 @@ public interface GJNoArguVisitor<R> {
     * f3 -> ")"
     * f4 -> Statement()
     */
-   public R visit(IfThenStmt n);
+   public void visit(IfThenStmt n);
 
    /**
     * f0 -> <IF>
@@ -299,7 +299,7 @@ public interface GJNoArguVisitor<R> {
     * f5 -> <ELSE>
     * f6 -> Statement()
     */
-   public R visit(IfThenElseStmt n);
+   public void visit(IfThenElseStmt n);
 
    /**
     * f0 -> <SWITCH>
@@ -310,25 +310,25 @@ public interface GJNoArguVisitor<R> {
     * f5 -> ( CaseStmt() )*
     * f6 -> "}"
     */
-   public R visit(SwitchStmt n);
+   public void visit(SwitchStmt n);
 
    /**
     * f0 -> <CASE> Expression() ":" ( Statement() )*
     *       | <DFLT> ":" ( Statement() )*
     */
-   public R visit(CaseStmt n);
+   public void visit(CaseStmt n);
 
    /**
     * f0 -> Identifier()
     * f1 -> ":"
     */
-   public R visit(Label n);
+   public void visit(Label n);
 
    /**
     * f0 -> Ops()
     * f1 -> PrimaryExpr()
     */
-   public R visit(BinOp n);
+   public void visit(BinOp n);
 
    /**
     * f0 -> "||"
@@ -350,29 +350,32 @@ public interface GJNoArguVisitor<R> {
     *       | "<<"
     *       | ">>"
     */
-   public R visit(Ops n);
+   public void visit(Ops n);
 
    /**
     * f0 -> "++"
     *       | "!"
     *       | "--"
+    *       | "-"
+    *       | "+"
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "(" Type() ")"
     */
-   public R visit(LeftUnary n);
+   public void visit(LeftUnary n);
 
    /**
     * f0 -> "++"
     *       | "--"
     */
-   public R visit(RightUnary n);
+   public void visit(RightUnary n);
 
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
     */
-   public R visit(Expression n);
+   public void visit(Expression n);
 
    /**
     * f0 -> RHSAssignExpr()
@@ -383,7 +386,7 @@ public interface GJNoArguVisitor<R> {
     *       | ArrayLookup()
     *       | TernaryExpr()
     */
-   public R visit(ExpressionContd n);
+   public void visit(ExpressionContd n);
 
    /**
     * f0 -> "=" Expression()
@@ -398,7 +401,7 @@ public interface GJNoArguVisitor<R> {
     *       | "^=" Expression()
     *       | "|=" Expression()
     */
-   public R visit(RHSAssignExpr n);
+   public void visit(RHSAssignExpr n);
 
    /**
     * f0 -> "?"
@@ -406,24 +409,24 @@ public interface GJNoArguVisitor<R> {
     * f2 -> ":"
     * f3 -> Expression()
     */
-   public R visit(TernaryExpr n);
+   public void visit(TernaryExpr n);
 
    /**
     * f0 -> ( "[" PrimaryExpr() "]" )+
     */
-   public R visit(ArrayLookup n);
+   public void visit(ArrayLookup n);
 
    /**
     * f0 -> StructOps()
     * f1 -> Identifier()
     */
-   public R visit(StructExpr n);
+   public void visit(StructExpr n);
 
    /**
     * f0 -> "->"
     *       | "."
     */
-   public R visit(StructOps n);
+   public void visit(StructOps n);
 
    /**
     * f0 -> Identifier()
@@ -433,12 +436,12 @@ public interface GJNoArguVisitor<R> {
     *       | <STRING_LITERAL>
     *       | <CHARACTER_LITERAL>
     */
-   public R visit(PrimaryExpr n);
+   public void visit(PrimaryExpr n);
 
    /**
     * f0 -> <IDENTIFIER>
     */
-   public R visit(Identifier n);
+   public void visit(Identifier n);
 
 }
 

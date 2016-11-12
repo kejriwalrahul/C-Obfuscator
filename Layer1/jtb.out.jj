@@ -192,7 +192,7 @@ DeclarationStmt DeclarationStmt() :
 
 FunctionDefinition FunctionDefinition() :
 {
-   TypeSpecifier n0;
+   Type n0;
    Identifier n1;
    NodeToken n2;
    Token n3;
@@ -205,7 +205,7 @@ FunctionDefinition FunctionDefinition() :
    
 }
 {
-   n0=TypeSpecifier()
+   n0=Type()
    n1=Identifier()
    n3="(" { n2 = JTBToolkit.makeNodeToken(n3); }
    (
@@ -220,7 +220,7 @@ FunctionDefinition FunctionDefinition() :
 
 FunctionDeclaration FunctionDeclaration() :
 {
-   TypeSpecifier n0;
+   Type n0;
    Identifier n1;
    NodeToken n2;
    Token n3;
@@ -234,7 +234,7 @@ FunctionDeclaration FunctionDeclaration() :
    
 }
 {
-   n0=TypeSpecifier()
+   n0=Type()
    n1=Identifier()
    n3="(" { n2 = JTBToolkit.makeNodeToken(n3); }
    (
@@ -1382,6 +1382,16 @@ LeftUnary LeftUnary() :
    Token n10;
    NodeToken n11;
    Token n12;
+   NodeToken n13;
+   Token n14;
+   NodeToken n15;
+   Token n16;
+   NodeSequence n17;
+   NodeToken n18;
+   Token n19;
+   Type n20;
+   NodeToken n21;
+   Token n22;
 
    
 }
@@ -1396,14 +1406,29 @@ LeftUnary LeftUnary() :
       n6="--" { n5 = JTBToolkit.makeNodeToken(n6); }
       { n0 = new NodeChoice(n5, 2); }
    |
-      n8="~" { n7 = JTBToolkit.makeNodeToken(n8); }
+      n8="-" { n7 = JTBToolkit.makeNodeToken(n8); }
       { n0 = new NodeChoice(n7, 3); }
    |
-      n10="*" { n9 = JTBToolkit.makeNodeToken(n10); }
+      n10="+" { n9 = JTBToolkit.makeNodeToken(n10); }
       { n0 = new NodeChoice(n9, 4); }
    |
-      n12="&" { n11 = JTBToolkit.makeNodeToken(n12); }
+      n12="~" { n11 = JTBToolkit.makeNodeToken(n12); }
       { n0 = new NodeChoice(n11, 5); }
+   |
+      n14="*" { n13 = JTBToolkit.makeNodeToken(n14); }
+      { n0 = new NodeChoice(n13, 6); }
+   |
+      n16="&" { n15 = JTBToolkit.makeNodeToken(n16); }
+      { n0 = new NodeChoice(n15, 7); }
+   |
+      { n17 = new NodeSequence(3); }
+      n19="(" { n18 = JTBToolkit.makeNodeToken(n19); }
+      { n17.addNode(n18); }
+      n20=Type()
+      { n17.addNode(n20); }
+      n22=")" { n21 = JTBToolkit.makeNodeToken(n22); }
+      { n17.addNode(n21); }
+      { n0 = new NodeChoice(n17, 8); }
    )
    
    { return new LeftUnary(n0); }
@@ -1446,7 +1471,8 @@ Expression Expression() :
 }
 {
    (
-      { n1 = new NodeSequence(2); }
+      LOOKAHEAD(PrimaryExpr())
+      { n1 = new NodeSequence(3); }
       n2=PrimaryExpr()
       { n1.addNode(n2); }
       (
