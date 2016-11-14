@@ -20,7 +20,7 @@ void swap(char *a, char *b)
 
 int compare(void *a, void *b)
 {
-	return (*(char *)a - *(char*)b);
+	return ((*((char *)a)) - (*((char*)b)));
 }
 
 void permt(char *arr, int len, int index)
@@ -44,7 +44,8 @@ int main()
 {
 	char arr[100];
 	scanf("%s", arr);
-	qsort(arr, strlen(arr), sizeof(char), compare);
-	permt(arr, strlen(arr), 0);
+	qsort(arr, strlen(arr), 1, compare);
+	printf("%s\n", arr);
+	// permt(arr, strlen(arr), 0);
 	return 0;
 }

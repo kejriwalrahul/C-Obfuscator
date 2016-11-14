@@ -32,13 +32,13 @@ public class CParser implements CParserConstants {
       types.add("__signed");
       if ( args.length == 0 )
       {
-         System.out.println("C Parser Version 0.1Alpha:  Reading from standard input . . .");
+         // System.out.println("C Parser Version 0.1Alpha:  Reading from standard input . . .");
          parser = new CParser(System.in);
       }
       else
          if ( args.length == 1 )
          {
-            System.out.println("C Parser Version 0.1Alpha:  Reading from file " + args[0]+ " . . .");
+            // System.out.println("C Parser Version 0.1Alpha:  Reading from file " + args[0]+ " . . .");
             try
             {
                parser = new CParser(new java.io.FileInputStream(args[0]));
@@ -60,7 +60,7 @@ public class CParser implements CParserConstants {
       try
       {
          Node root = parser.TranslationUnit();
-         System.out.println("C Parser Version 0.1Alpha:  Java program parsed successfully.");
+         // System.out.println("C Parser Version 0.1Alpha:  Java program parsed successfully.");
           Translator t = new Translator();
           root.accept(t);
       }
@@ -85,7 +85,7 @@ public class CParser implements CParserConstants {
       }
     }
      n0.nodes.trimToSize();
-      printTypes();
+      // printTypes();
      {if (true) return new TranslationUnit(n0);}
     throw new Error("Missing return statement in function");
   }
