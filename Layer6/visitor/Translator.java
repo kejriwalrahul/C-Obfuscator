@@ -18,7 +18,8 @@ class simpleStmt{
 public class Translator extends GJNoArguDepthFirst<String> {
    
 	ArrayList<simpleStmt> stmts = new ArrayList<simpleStmt>();
-	
+  String lastLabel = "";
+
    //
    // Auto class visitors--probably don't need to be overridden.
    //
@@ -176,7 +177,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " + n.f2.accept(this);
       
       simpleStmt stmt = new simpleStmt();
-      stmt.label = s;
+      stmt.label = lastLabel;
       stmt.stmt = _ret;
       stmts.add(stmt);
       
@@ -646,8 +647,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Label n) {
       String _ret="";
-      _ret += " " + n.f0.accept(this);
+      String s = n.f0.accept(this);
+      _ret += " " + s;
       _ret += " " + n.f1.accept(this);
+      lastLabel = s;
       return _ret;
    }
 

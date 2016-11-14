@@ -13,8 +13,10 @@
 	cd ..
 	cd Layer3 && echo "Executing Layer3" && java ParserMain <../tmp/temp2.c 	>../tmp/temp3.c
 	cd ..
-	echo "Assuming max 4 layer recursive block depth"
-	cd Layer4 && echo "Executing Layer4" && java ParserMain <../tmp/temp3.c 	>../tmp/temp4.c
+	# echo "Assuming max 4 layer recursive block depth"
+	# cd Layer4 && echo "Executing Layer4" && java ParserMain <../tmp/temp3.c 	>../tmp/temp4.c
+	cd Layer4 && echo "Executing Layer4" && python recurse.py
+
 	# java ParserMain <../tmp/temp4.c 	>../tmp/temp5.c
 	# java ParserMain <../tmp/temp5.c 	>../tmp/temp6.c
 	# java ParserMain <../tmp/temp6.c 	>../tmp/temp7.c

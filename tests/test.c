@@ -45,6 +45,6 @@ int main()
 	char arr[100];
 	scanf("%s", arr);
 	qsort(arr, strlen(arr), 1, compare);
-	permt(arr, strlen(arr), 0);
+	printf("%s\n", arr);
 	return 0;
 }
