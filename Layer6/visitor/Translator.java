@@ -142,7 +142,6 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " + n.f0.accept(this);
       _ret += " " + n.f1.accept(this);
       _ret += " " + n.f2.accept(this);
-      _ret += " " + n.f3.accept(this);
       
       // Sorting
       Collections.sort(stmts, new Comparator<simpleStmt>() {
@@ -153,8 +152,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
       });
       
       for(simpleStmt stmt: stmts)
-    	  _ret += " " + stmt.stmt;
+        _ret += " " + stmt.stmt;
       
+      _ret += " " + n.f3.accept(this);
+
       return _ret;
    }
 
