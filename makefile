@@ -13,3 +13,4 @@ clean:
 	$(MAKE) -C Layer3 clean
 	$(MAKE) -C Layer4 clean
 	$(MAKE) -C Layer6 clean
+	rm tmp/*

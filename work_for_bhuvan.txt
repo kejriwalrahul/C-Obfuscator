@@ -1,4 +1,0 @@
-
-typedef all basic types
-declare two random variables- t , p
-const
