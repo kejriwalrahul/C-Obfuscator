@@ -194,7 +194,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
       String _ret="";
       _ret += " " +  n.f0.accept(this);
       _ret += " " +  n.f1.accept(this);
-      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f2.accept(this)+ " ;";
       _ret += " " +  n.f3.accept(this);
       return _ret;
    }
@@ -511,7 +511,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(StatementList n) {
       String _ret="";
       _ret += " " +  n.f0.accept(this);
-      return _ret;
+      return _ret + ";";
    }
 
    /**
