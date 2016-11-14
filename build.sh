@@ -17,3 +17,4 @@
 	# java ParserMain <../tmp/temp5.c 	>../tmp/temp6.c
 	# java ParserMain <../tmp/temp6.c 	>../tmp/temp7.c
 	cd ../Layer6 && echo "at layer 6" && java ParserMain < ../tmp/temp4.c > ../tmp/output.c
+	cd ../tmp && cat deps output.c >foutput.c
