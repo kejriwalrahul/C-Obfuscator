@@ -578,10 +578,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
     	  if(n.f4.present())	e2 = ((Expression)n.f4.node).accept(this);
     	  if(n.f6.present())	e3 = ((Expression)n.f6.node).accept(this);
     		  
-    	  _ret += " " +  e1 + "goto " + s1 + ";";
+    	  _ret += " " +  e1 + "; goto " + s1 + ";";
     	  _ret += " " +  s1 + ": if(" + e2 + ") goto " + s2 + "; else goto " + exit + ";";
     	  _ret += " " +  s2 + ":" + n.f8.accept(this) + "goto " + s3    + ";";
-    	  _ret += " " +  s3 + ":" + e3 + "goto " + s1    + ";";    	  
+    	  _ret += " " +  s3 + ":" + e3 + "; goto " + s1    + ";";    	  
       }
       else{
           _ret += " " +  n.f0.accept(this);
