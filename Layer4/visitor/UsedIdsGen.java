@@ -16,6 +16,18 @@ public class UsedIdsGen extends DepthFirstVisitor{
    //
 	
    public HashSet<String> used = new HashSet<String>();
+   public int maxNestingDepth = 0;
+   int currDepth = 0;
+
+   void inc(){
+      currDepth += 1;
+      if(currDepth > maxNestingDepth)
+        maxNestingDepth = currDepth;
+   }
+
+   void dec(){
+      currDepth -= 1;
+   }
 	
    public void visit(NodeList n) {
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
@@ -104,10 +116,12 @@ public class UsedIdsGen extends DepthFirstVisitor{
     * f3 -> "}"
     */
    public void visit(SimpleBlock n) {
+      inc();
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      dec();
    }
 
    /**
@@ -320,9 +334,11 @@ public class UsedIdsGen extends DepthFirstVisitor{
     * f2 -> "}"
     */
    public void visit(Block n) {
+      inc();
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      dec();
    }
 
    /**
@@ -500,6 +516,7 @@ public class UsedIdsGen extends DepthFirstVisitor{
     * f6 -> "}"
     */
    public void visit(SwitchStmt n) {
+      inc();
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -507,6 +524,7 @@ public class UsedIdsGen extends DepthFirstVisitor{
       n.f4.accept(this);
       n.f5.accept(this);
       n.f6.accept(this);
+      dec();
    }
 
    /**
