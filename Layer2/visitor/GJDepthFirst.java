@@ -5,24 +5,15 @@
 package visitor;
 import syntaxtree.*;
 import java.util.*;
-import helper.*;
 
 /**
  * Provides default methods which visit each node in the tree in depth-first
  * order.  Your visitors may extend this class.
  */
-
-public class Pass1<R,A> implements GJVisitor<R,A> {
+public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    //
    // Auto class visitors--probably don't need to be overridden.
    //
-
-   public GlobalSymTab g = new GlobalSymTab();
-
-   public void print(String s) {
-      System.out.print(s);
-   }
-
    public R visit(NodeList n, A argu) {
       R _ret=null;
       int _count=0;
@@ -55,13 +46,13 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    }
 
    public R visit(NodeSequence n, A argu) {
-      String _ret="";
+      R _ret=null;
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-         _ret += " " + e.nextElement().accept(this,argu);
+         e.nextElement().accept(this,argu);
          _count++;
       }
-      return (R)_ret;
+      return _ret;
    }
 
    public R visit(NodeToken n, A argu) { return null; }
@@ -105,19 +96,15 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f2 -> ";"
     */
    public R visit(DeclarationStmt n, A argu) {
-      String _ret="";
-      A param = argu;
-      String type = n.f0.accept(this, argu).toString();
-      _ret = type;
-      if(argu!=null)
-        param = (A)type;
-      _ret += " " + n.f1.accept(this, param) + ";";
+      R _ret=null;
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
       n.f2.accept(this, argu);
-      return (R)_ret;
+      return _ret;
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
@@ -127,21 +114,16 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    public R visit(FunctionDefinition n, A argu) {
       R _ret=null;
       n.f0.accept(this, argu);
-      String func_name = n.f1.accept(this, argu).toString();
+      n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
-
-      g.add_function(func_name);
-
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
-
-
       return _ret;
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
@@ -190,33 +172,14 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f5 -> ";"
     */
    public R visit(StructDeclaration n, A argu) {
-      String _ret="";
-      String name=null;
+      R _ret=null;
       n.f0.accept(this, argu);
-      int i;
-      _ret = "struct";
-
-      NodeOptional id = (NodeOptional)n.f1;
-      if(id.present())
-      {
-        name = id.node.accept(this, argu).toString();
-        _ret += " " + name;
-      }
-
-      NodeListOptional ns = (NodeListOptional)n.f3;
-      _ret += " { ";
-      if(ns.present())
-      {
-        for(i=0;i<ns.size();i++)
-        {
-          _ret += " " + ns.elementAt(i).accept(this, null).toString();
-        }
-      }
-      _ret += " };";
-
-      g.add_struct(name, _ret);
-
-      return (R)_ret;
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+      n.f4.accept(this, argu);
+      n.f5.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -244,32 +207,15 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f6 -> ";"
     */
    public R visit(EnumDeclaration n, A argu) {
-      String _ret="", name=null;
-      
-      _ret = "enum";
-      int i;
-      
-      name = n.f1.accept(this, argu).toString();
-      _ret += " " + name;
-
-      _ret += " { ";
-      
-      _ret += " " + n.f3.accept(this, argu).toString();
-
-      NodeListOptional nlo = (NodeListOptional)n.f4;
-      if(nlo.present())
-      {
-        for(i=0;i<nlo.size();i++)
-        {
-          _ret += ", " + ((NodeSequence)nlo.elementAt(i)).elementAt(1).accept(this, (A)"return");
-        }
-      }
-
-      _ret += " };";
-
-      g.add_enum(name, _ret);
-
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+      n.f4.accept(this, argu);
+      n.f5.accept(this, argu);
+      n.f6.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -283,15 +229,11 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    public R visit(PMain n, A argu) {
       R _ret=null;
       n.f0.accept(this, argu);
-      String func_name = n.f1.toString();
+      n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
-
-      g.add_function(func_name);
-
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
-
       return _ret;
    }
 
@@ -312,11 +254,8 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(BaseType n, A argu) {
       R _ret=null;
-      String storage_class = "";
-      if(n.f0.present())
-        storage_class = n.f0.accept(this, argu).toString();
-      String type = n.f1.accept(this, argu).toString();
-      _ret = (R) (storage_class + " " + type);
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
       return _ret;
    }
 
@@ -326,7 +265,6 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    public R visit(StorageClass n, A argu) {
       R _ret=null;
       n.f0.accept(this, argu);
-      _ret = (R)n.f0.toString();
       return _ret;
    }
 
@@ -345,73 +283,9 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     *       | <ENUM> [ Identifier() ] "{" Identifier() ( "," Identifier() )* "}"
     */
    public R visit(TypeSpecifier n, A argu) {
-      String _ret="";
-
-      int i;
-
-      if(n.f0.which<9)
-      {
-        _ret = n.f0.choice.toString();
-      }
-      else
-      if(n.f0.which==9)
-      {
-        _ret = n.f0.choice.accept(this, argu).toString();
-      }
-      else
-      if(n.f0.which==10)
-      {
-        _ret = "struct";
-
-        NodeOptional id = (NodeOptional)((NodeSequence)n.f0.choice).elementAt(1);
-        if(id.present())
-        {
-          _ret += " " + id.node.accept(this, argu).toString();
-        }
-
-        NodeOptional ndopt = (NodeOptional)((NodeSequence)n.f0.choice).elementAt(2);
-
-        if(ndopt.present())
-        {
-          NodeListOptional ns = (NodeListOptional)((NodeSequence)ndopt.node).elementAt(1);
-          _ret += " { ";
-          for(i=0;i<ns.size();i++)
-          {
-            _ret += " " + ns.elementAt(i).accept(this, null).toString();
-          }
-          _ret += " } ";
-        }
-      }
-      else
-      if(n.f0.which==11)
-      {
-        _ret = "enum";
-
-        NodeSequence ns = (NodeSequence)n.f0.choice;
-        NodeOptional id = (NodeOptional)ns.elementAt(1);
-        if(id.present())
-        {
-          _ret += " " + id.node.accept(this, argu).toString();
-        }
-
-        _ret += " { ";
-        
-        _ret += " " + ns.elementAt(3).accept(this, argu).toString();
-
-        NodeListOptional nlo = (NodeListOptional)ns.elementAt(4);
-        if(nlo.present())
-        {
-          for(i=0;i<nlo.size();i++)
-          {
-            _ret += ", " + ((NodeSequence)nlo.elementAt(i)).elementAt(1).accept(this, (A)"return");
-          }
-        }
-
-        _ret += " } ";
-
-      }
-
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -451,15 +325,10 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f1 -> ( "," ObjectType() )*
     */
    public R visit(ObjectList n, A argu) {
-      String _ret=null;
-      _ret = n.f0.accept(this, argu).toString() + " ";
-
-      for(int i=0;i<n.f1.size();i++)
-      {
-        _ret += ", " + ((NodeSequence)n.f1.elementAt(i)).elementAt(1).accept(this, argu).toString();
-      }
-
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -469,45 +338,12 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f3 -> [ "=" Expression() ]
     */
    public R visit(ObjectType n, A argu) {
-      String _ret="";
-
-      // receives base type as string in argu
-      // identifier serves as variable name
-      // need to maintain original order in the declaration and assignments
-      int i, array_level = 0, pointer_level = 0;
-      String rhs = null, temp;
-
-      if(n.f0.present()){
-        pointer_level = n.f0.size();
-        for(i=0;i<pointer_level;i++)
-          _ret += "*";
-      }
-
-      String var_name = n.f1.accept(this, argu).toString();
-      _ret += var_name;
-
-      ArrayList<String> dimexpr = new ArrayList<String>();
-
-      if(n.f2.present())
-      {
-        array_level = n.f2.size();
-        for(i=0;i<array_level;i++)
-        {
-          temp = ((NodeSequence)n.f2.elementAt(i)).elementAt(1).accept(this, (A)"return").toString();
-          _ret += "[" + temp + "]";
-          dimexpr.add(temp);
-        }
-      }
-
-      if(n.f3.present()){
-        rhs = ((NodeSequence)n.f3.node).elementAt(1).accept(this, (A)"return").toString();
-        _ret += "= " + rhs;
-      }
-
-      if(argu!=null)
-        g.curr_func.put_variable(var_name, argu.toString(), pointer_level, array_level, dimexpr, rhs);
-
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -549,13 +385,13 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(Statement n, A argu) {
       R _ret=null;
-      n.f0.accept(this, (A)"not-struct");
+      n.f0.accept(this, argu);
       return _ret;
    }
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public R visit(GotoStmt n, A argu) {
@@ -739,9 +575,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(CaseStmt n, A argu) {
       R _ret=null;
-      
       n.f0.accept(this, argu);
-
       return _ret;
    }
 
@@ -752,6 +586,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    public R visit(Label n, A argu) {
       R _ret=null;
       n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
       return _ret;
    }
 
@@ -760,10 +595,10 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f1 -> PrimaryExpr()
     */
    public R visit(BinOp n, A argu) {
-      String _ret="";
-      _ret = n.f0.accept(this, argu).toString();
-      _ret += " " + n.f1.accept(this, argu).toString();
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -788,7 +623,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(Ops n, A argu) {
       R _ret=null;
-      _ret = (R)((NodeToken)n.f0.choice).tokenImage;
+      n.f0.accept(this, argu);
       return _ret;
    }
 
@@ -799,10 +634,13 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "+"
+    *       | "-"
+    *       | "(" Type() ")"
     */
    public R visit(LeftUnary n, A argu) {
       R _ret=null;
-      _ret = (R)n.f0.choice.toString();
+      n.f0.accept(this, argu);
       return _ret;
    }
 
@@ -812,7 +650,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(RightUnary n, A argu) {
       R _ret=null;
-      _ret = (R)((NodeToken)n.f0.choice).toString();
+      n.f0.accept(this, argu);
       return _ret;
    }
 
@@ -821,19 +659,9 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     *       | LeftUnary() PrimaryExpr()
     */
    public R visit(Expression n, A argu) {
-      String _ret="";
-      if(n.f0.which==0)
-      {
-        _ret = ((NodeSequence)n.f0.choice).elementAt(0).accept(this, argu).toString();
-        if(((NodeOptional)((NodeSequence)n.f0.choice).elementAt(1)).present())
-          _ret += " " + ((NodeOptional)((NodeSequence)n.f0.choice).elementAt(1)).node.accept(this, argu).toString();
-      }
-      else
-      {
-        _ret = ((NodeSequence)n.f0.choice).elementAt(0).accept(this, argu).toString();
-        _ret += " " + ((NodeSequence)n.f0.choice).elementAt(1).accept(this, argu).toString();
-      }
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -846,30 +674,9 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     *       | TernaryExpr()
     */
    public R visit(ExpressionContd n, A argu) {
-      String _ret="";
-      int i;
-      if(n.f0.which==1)
-      {
-        _ret += " (";
-        NodeOptional ndopt = (NodeOptional)((NodeSequence)n.f0.choice).elementAt(1);
-        if(ndopt.present())
-        {
-          _ret += " " + ((NodeSequence)ndopt.node).elementAt(0).accept(this, (A)"return").toString();
-          NodeListOptional nlo = (NodeListOptional)((NodeSequence)ndopt.node).elementAt(1);
-          if(nlo.present())
-          {
-            for(i=0;i<nlo.size();i++)
-            {
-              _ret += ", "+((NodeSequence)nlo.elementAt(i)).elementAt(1).accept(this, (A)"return").toString();
-            }
-          }
-        }
-        _ret += " ) ";
-      }
-      else
-        _ret += " " + n.f0.choice.accept(this, argu).toString();
-
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -886,10 +693,9 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     *       | "|=" Expression()
     */
    public R visit(RHSAssignExpr n, A argu) {
-      String _ret="";
-      NodeSequence ns = (NodeSequence)n.f0.choice;
-      _ret = ns.elementAt(0).toString() + " " + ns.elementAt(1).accept(this, (A)"return").toString();
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -899,26 +705,21 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f3 -> Expression()
     */
    public R visit(TernaryExpr n, A argu) {
-      String _ret="";
+      R _ret=null;
       n.f0.accept(this, argu);
-      _ret = "?";
-      _ret += " " + n.f1.accept(this, argu);
+      n.f1.accept(this, argu);
       n.f2.accept(this, argu);
-      _ret += ":";
-      _ret += " " + n.f3.accept(this, argu);
-      return (R)_ret;
+      n.f3.accept(this, argu);
+      return _ret;
    }
 
    /**
     * f0 -> ( "[" PrimaryExpr() "]" )+
     */
    public R visit(ArrayLookup n, A argu) {
-      String _ret="";
-      for(int i=0;i<n.f0.size();i++)
-      {
-        _ret += "[" + ((NodeSequence)n.f0.elementAt(i)).elementAt(1).accept(this, (A)"return").toString() + "]";
-      }
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -926,10 +727,10 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     * f1 -> Identifier()
     */
    public R visit(StructExpr n, A argu) {
-      String _ret="";
-      _ret = n.f0.accept(this, argu).toString();
-      _ret += " " + n.f1.accept(this, argu).toString();
-      return (R)_ret;
+      R _ret=null;
+      n.f0.accept(this, argu);
+      n.f1.accept(this, argu);
+      return _ret;
    }
 
    /**
@@ -938,7 +739,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(StructOps n, A argu) {
       R _ret=null;
-      _ret = (R)((NodeToken)n.f0.choice).toString();
+      n.f0.accept(this, argu);
       return _ret;
    }
 
@@ -952,21 +753,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(PrimaryExpr n, A argu) {
       R _ret=null;
-      // n.f0.accept(this, argu);
-      if(n.f0.which==0)
-      {
-        _ret = n.f0.choice.accept(this, argu);
-      }
-      else
-      if(n.f0.which==1)
-      {
-        _ret = (R)(" ( " + ((NodeSequence)n.f0.choice).elementAt(1).accept(this, (A)"return").toString() + " ) ");
-      }
-      else
-      {
-        _ret = (R)n.f0.choice.toString();
-      }
-
+      n.f0.accept(this, argu);
       return _ret;
    }
 
@@ -975,7 +762,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(Identifier n, A argu) {
       R _ret=null;
-      _ret = (R)n.f0.toString();
+      n.f0.accept(this, argu);
       return _ret;
    }
 
