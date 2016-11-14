@@ -156,6 +156,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
       
       _ret += " " + n.f3.accept(this);
 
+      stmts = new ArrayList<simpleStmt>(); 
+
       return _ret;
    }
 
