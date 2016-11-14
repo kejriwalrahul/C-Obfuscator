@@ -143,6 +143,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " + n.f1.accept(this);
       _ret += " " + n.f2.accept(this);
       
+      _ret += "goto " + stmts.get(0).label + ";";
+
       // Sorting
       Collections.sort(stmts, new Comparator<simpleStmt>() {
               @Override
