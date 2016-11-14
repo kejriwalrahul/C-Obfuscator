@@ -8,26 +8,26 @@ package syntaxtree;
  * Grammar production:
  * f0 -> <FOR>
  * f1 -> "("
- * f2 -> Expression()
+ * f2 -> [ Expression() ]
  * f3 -> ";"
- * f4 -> Expression()
+ * f4 -> [ Expression() ]
  * f5 -> ";"
- * f6 -> Expression()
+ * f6 -> [ Expression() ]
  * f7 -> ")"
  * f8 -> Statement()
  */
 public class ForLoop implements Node {
    public NodeToken f0;
    public NodeToken f1;
-   public Expression f2;
+   public NodeOptional f2;
    public NodeToken f3;
-   public Expression f4;
+   public NodeOptional f4;
    public NodeToken f5;
-   public Expression f6;
+   public NodeOptional f6;
    public NodeToken f7;
    public Statement f8;
 
-   public ForLoop(NodeToken n0, NodeToken n1, Expression n2, NodeToken n3, Expression n4, NodeToken n5, Expression n6, NodeToken n7, Statement n8) {
+   public ForLoop(NodeToken n0, NodeToken n1, NodeOptional n2, NodeToken n3, NodeOptional n4, NodeToken n5, NodeOptional n6, NodeToken n7, Statement n8) {
       f0 = n0;
       f1 = n1;
       f2 = n2;
@@ -39,7 +39,7 @@ public class ForLoop implements Node {
       f8 = n8;
    }
 
-   public ForLoop(Expression n0, Expression n1, Expression n2, Statement n3) {
+   public ForLoop(NodeOptional n0, NodeOptional n1, NodeOptional n2, Statement n3) {
       f0 = new NodeToken("for");
       f1 = new NodeToken("(");
       f2 = n0;

@@ -253,14 +253,18 @@ StatementUnit StatementUnit() :
 {
    Label n0;
    Statement n1;
-   GotoStmt n2;
+   NodeOptional n2 = new NodeOptional();
+   GotoStmt n3;
 
    
 }
 {
    n0=Label()
    n1=Statement()
-   n2=GotoStmt()
+   (
+      n3=GotoStmt()
+      { n2.addNode(n3); }
+   )?
    
    { return new StatementUnit(n0,n1,n2); }
 }
@@ -969,7 +973,7 @@ GotoStmt GotoStmt() :
 {
    NodeToken n0;
    Token n1;
-   Label n2;
+   Identifier n2;
    NodeToken n3;
    Token n4;
 
@@ -977,7 +981,7 @@ GotoStmt GotoStmt() :
 }
 {
    n1=<GOTO> { n0 = JTBToolkit.makeNodeToken(n1); }
-   n2=Label()
+   n2=Identifier()
    n4=";" { n3 = JTBToolkit.makeNodeToken(n4); }
    
    { return new GotoStmt(n0,n2,n3); }
@@ -989,31 +993,43 @@ ForLoop ForLoop() :
    Token n1;
    NodeToken n2;
    Token n3;
-   Expression n4;
-   NodeToken n5;
-   Token n6;
-   Expression n7;
-   NodeToken n8;
-   Token n9;
-   Expression n10;
-   NodeToken n11;
-   Token n12;
-   Statement n13;
+   NodeOptional n4 = new NodeOptional();
+   Expression n5;
+   NodeToken n6;
+   Token n7;
+   NodeOptional n8 = new NodeOptional();
+   Expression n9;
+   NodeToken n10;
+   Token n11;
+   NodeOptional n12 = new NodeOptional();
+   Expression n13;
+   NodeToken n14;
+   Token n15;
+   Statement n16;
 
    
 }
 {
    n1=<FOR> { n0 = JTBToolkit.makeNodeToken(n1); }
    n3="(" { n2 = JTBToolkit.makeNodeToken(n3); }
-   n4=Expression()
-   n6=";" { n5 = JTBToolkit.makeNodeToken(n6); }
-   n7=Expression()
-   n9=";" { n8 = JTBToolkit.makeNodeToken(n9); }
-   n10=Expression()
-   n12=")" { n11 = JTBToolkit.makeNodeToken(n12); }
-   n13=Statement()
+   (
+      n5=Expression()
+      { n4.addNode(n5); }
+   )?
+   n7=";" { n6 = JTBToolkit.makeNodeToken(n7); }
+   (
+      n9=Expression()
+      { n8.addNode(n9); }
+   )?
+   n11=";" { n10 = JTBToolkit.makeNodeToken(n11); }
+   (
+      n13=Expression()
+      { n12.addNode(n13); }
+   )?
+   n15=")" { n14 = JTBToolkit.makeNodeToken(n15); }
+   n16=Statement()
    
-   { return new ForLoop(n0,n2,n4,n5,n7,n8,n10,n11,n13); }
+   { return new ForLoop(n0,n2,n4,n6,n8,n10,n12,n14,n16); }
 }
 
 WhileLoop WhileLoop() :

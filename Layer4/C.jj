@@ -115,7 +115,7 @@ void SimpleBlock() : {}
 
 void StatementUnit() : {}
 {
-	Label() Statement() GotoStmt()
+	Label() Statement() [GotoStmt()]
 }
 
 void FunctionDeclaration() : {}
@@ -255,12 +255,12 @@ void Statement() : {}
 
 void GotoStmt() : {}
 {
-	<GOTO> Label() ";"
+	<GOTO> Identifier() ";"
 }
 
 void ForLoop() : {}
 {
-	<FOR> "(" Expression() ";" Expression() ";" Expression() ")" Statement()
+	<FOR> "(" [Expression()] ";" [Expression()] ";" [Expression()] ")" Statement()
 }
 
 void WhileLoop() : {}

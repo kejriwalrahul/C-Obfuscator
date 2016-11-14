@@ -17,10 +17,25 @@ public class Translator extends GJNoArguDepthFirst<String> {
    ArrayList<String> exitStack  = new ArrayList<String>();
    
    boolean blockUnwind = false;
+   boolean ifUnwind = false;
    boolean switchUnwind  = false;
    boolean whileUnwind = false;
+   String entry = "";
+   String exit = "";
+   
+   int nestedBlock = 0;
    
    String caseAccumulator="";
+   
+   public void resetFlags(){
+	   blockUnwind = false;
+	   ifUnwind = false;
+	   switchUnwind = false;
+	   whileUnwind = false;
+	   entry = "";
+	   exit = "";
+	   nestedBlock = 0;
+   }
    
    private static String generateRandom(String aToZ, int size) {
 	    Random rand=new Random();
@@ -64,28 +79,18 @@ public class Translator extends GJNoArguDepthFirst<String> {
       String _ret="";
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-         _ret += e.nextElement().accept(this);
+         _ret += " " +  e.nextElement().accept(this);
          _count++;
       }
       return _ret;
    }
 
-   public String visit(NodeListOptional n) {
-      boolean flag = blockUnwind;
-      blockUnwind = false;
-      
-      boolean switchflag = switchUnwind;
-
+   public String visit(NodeListOptional n) {      
       if ( n.present() ) {
          String _ret="";
          int _count=0;
          for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-        	 if(switchflag) 	switchUnwind = true;
-        	 _ret += e.nextElement().accept(this);
-        	 if(flag){
-        		 String s = genName();
-        		 _ret += "goto " + s + ";" + s + ":";
-        	 }
+        	 _ret += " " +  e.nextElement().accept(this);
             _count++;
          }
          return _ret;
@@ -105,7 +110,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
       String _ret="";
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-    	  _ret += e.nextElement().accept(this);
+    	  _ret += " " +  e.nextElement().accept(this);
          _count++;
       }
       return _ret;
@@ -125,10 +130,11 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Goal n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      System.out.println(_ret);
       return _ret;
    }
 
@@ -142,7 +148,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(VariablesAndFunctions n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -153,9 +159,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(DeclarationStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
       return _ret;
    }
 
@@ -169,12 +175,12 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(FunctionDefinition n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      _ret += " " +  n.f4.accept(this);
+      _ret += " " +  n.f5.accept(this);
       return _ret;
    }
 
@@ -186,42 +192,75 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(SimpleBlock n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
       return _ret;
    }
 
    /**
     * f0 -> Label()
     * f1 -> Statement()
-    * f2 -> GotoStmt()
+    * f2 -> [GotoStmt()]
+    */
+   
+   /**
+    * Statement productions:
+    * f0 ->   0 - ForLoop()				Done
+    *       | 1- WhileLoop()			Done
+    *       | 2 - DoWhile()				Done
+    *       | 3 - Block()				Done
+    *       | 4 - IfStmt()				Done
+    *       | 5 - SwitchStmt()			Done
+    *       | 6 - BreakStmt()			Done
+    *       | 7 - ContinueStmt()		Done
+    *       | 8 - ReturnStmt()			Done
+    *       | 9 - DeclarationStmt()		NA
+    *       |10 - Expression() ";"		NA
+    *       |11 - GotoStmt()			Done
+    *       |12 - ";"					Done
     */
    public String visit(StatementUnit n) {
       String _ret="";
       int choice = n.f1.f0.which;
-      if(choice == 0 || choice == 1 || choice == 2 || choice == 5)
-    	  pushEntryExit(n.f0.f0.f0.tokenImage, n.f2.f2.tokenImage);
+      String entryLabel = n.f0.f0.f0.tokenImage;
+      String exitLabel = "";
+      if(n.f2.present())
+    	  exitLabel = ((GotoStmt)n.f2.node).f1.f0.tokenImage;
       
-      _ret += n.f0.accept(this);
-      
-      if(choice == 3)	blockUnwind = true;
+      // For, while, dowhile, switch statements
+      // for break and continue transformaation
+      if(choice == 0 || choice == 1 || choice == 2 || choice == 4 || choice == 5){
+    	  // pushEntryExit(entryLabel, exitLabel);
+    	  entry = entryLabel;
+    	  exit  = exitLabel;
+      }
+    	  
+      if(choice == 0 
+      || choice == 1 
+      || choice == 2)	whileUnwind  = true;      
+      if(choice == 3)	blockUnwind  = true;
+      if(choice == 4)	ifUnwind 	 = true; 
       if(choice == 5)	switchUnwind = true;
-      if(choice == 0 || choice == 1 || choice == 2)	whileUnwind = true;
       
-      if(choice == 6)
-    	  _ret += "goto " + exitStack.get(exitStack.size()-1) + ";";
-      else if(choice == 12)
-    	  _ret += "";
-      else
-    	  _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      if(choice == 12)
+    	  _ret += " " +  "";
+      else{
+    	  nestedBlock = 0;
+    	  _ret += " " +  n.f1.accept(this);
+      }
       
-      if(choice != 11 && choice != 8)
-    	  _ret += n.f2.accept(this);
+      if(choice != 11 && choice != 8 && n.f2.present())
+    	  _ret += " " +  ((GotoStmt)n.f2.node).accept(this);
       
-      popEntryExit();
-      if(choice == 5)	_ret += caseAccumulator;
+      // popEntryExit();
+      entry = "";
+      exit  = "";
+      
+      if(choice == 5)	_ret += " " +  caseAccumulator;
+      resetFlags();
       return _ret;
    }
 
@@ -235,12 +274,12 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(FunctionDeclaration n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      _ret += " " +  n.f4.accept(this);
+      _ret += " " +  n.f5.accept(this);
       return _ret;
    }
 
@@ -250,8 +289,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ParameterList n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -261,8 +300,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ParameterDeclaration n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -276,12 +315,12 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(StructDeclaration n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      _ret += " " +  n.f4.accept(this);
+      _ret += " " +  n.f5.accept(this);
       return _ret;
    }
 
@@ -293,10 +332,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(TypeDef n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
       return _ret;
    }
 
@@ -311,13 +350,13 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(EnumDeclaration n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
-      _ret += n.f6.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      _ret += " " +  n.f4.accept(this);
+      _ret += " " +  n.f5.accept(this);
+      _ret += " " +  n.f6.accept(this);
       return _ret;
    }
 
@@ -331,12 +370,12 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(PMain n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      _ret += " " +  n.f4.accept(this);
+      _ret += " " +  n.f5.accept(this);
       return _ret;
    }
 
@@ -346,8 +385,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Type n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -357,8 +396,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(BaseType n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -367,7 +406,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(StorageClass n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -387,7 +426,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(TypeSpecifier n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -397,8 +436,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ArgList n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -408,8 +447,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Arg n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -419,7 +458,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(MainReturnType n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -429,8 +468,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ObjectList n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -442,10 +481,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ObjectType n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
       return _ret;
    }
 
@@ -455,10 +494,14 @@ public class Translator extends GJNoArguDepthFirst<String> {
     * f2 -> "}"
     */
    public String visit(Block n) {
-      String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
+      nestedBlock++;
+	   
+	  String _ret="";
+	  if(!blockUnwind)	  _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      if(!blockUnwind)	  _ret += " " +  n.f2.accept(this);
+
+      nestedBlock--;
       return _ret;
    }
 
@@ -467,7 +510,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(StatementList n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -488,7 +531,11 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Statement n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
+ 	  if(blockUnwind && nestedBlock == 1){
+		 String s = genName();
+		 _ret += " " +  "goto " + s + ";" + s + ":";
+	  }
       return _ret;
    }
 
@@ -499,9 +546,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(GotoStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
       return _ret;
    }
 
@@ -518,26 +565,34 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ForLoop n) {
       String _ret="";
-      if(whileUnwind){
+      if(whileUnwind && nestedBlock == 0){
     	  String s1 = genName();
     	  String s2 = genName();
     	  String s3 = genName();
     	  
-    	  _ret += n.f2.accept(this) + "goto " + s1 + ";";
-    	  _ret += s1 + ": if(" + n.f4.accept(this) + ") goto " + s2 + "; else goto " + exitStack.get(exitStack.size()-1) + ";";
-    	  _ret += s1 + ":" + n.f8.accept(this) + "goto " + s3 + ";";
-    	  _ret += s3 + ":" + n.f6.accept(this) + s1  +";";    	  
+    	  String oEntry = entry;
+    	  entry = s3;
+    	  
+    	  String e1="", e2="", e3="";
+    	  if(n.f2.present())	e1 = ((Expression)n.f2.node).accept(this);
+    	  if(n.f4.present())	e2 = ((Expression)n.f4.node).accept(this);
+    	  if(n.f6.present())	e3 = ((Expression)n.f6.node).accept(this);
+    		  
+    	  _ret += " " +  e1 + "goto " + s1 + ";";
+    	  _ret += " " +  s1 + ": if(" + e2 + ") goto " + s2 + "; else goto " + exit + ";";
+    	  _ret += " " +  s2 + ":" + n.f8.accept(this) + "goto " + s3    + ";";
+    	  _ret += " " +  s3 + ":" + e3 + "goto " + s1    + ";";    	  
       }
       else{
-          _ret += n.f0.accept(this);
-          _ret += n.f1.accept(this);
-          _ret += n.f2.accept(this);
-          _ret += n.f3.accept(this);
-          _ret += n.f4.accept(this);
-          _ret += n.f5.accept(this);
-          _ret += n.f6.accept(this);
-          _ret += n.f7.accept(this);
-          _ret += n.f8.accept(this);    	  
+          _ret += " " +  n.f0.accept(this);
+          _ret += " " +  n.f1.accept(this);
+          _ret += " " +  n.f2.accept(this);
+          _ret += " " +  n.f3.accept(this);
+          _ret += " " +  n.f4.accept(this);
+          _ret += " " +  n.f5.accept(this);
+          _ret += " " +  n.f6.accept(this);
+          _ret += " " +  n.f7.accept(this);
+          _ret += " " +  n.f8.accept(this);    	  
       }
       return _ret;
    }
@@ -552,17 +607,17 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(WhileLoop n) {
 	  String _ret="";
 	  
-	  if(whileUnwind){
+	  if(whileUnwind && nestedBlock == 0){
 		  String newLabel = genName();
-		  _ret += "if(" + n.f2.accept(this) + ") goto " + newLabel + "; else goto " + exitStack.get(exitStack.size()-1) + ";";
-		  _ret += newLabel + ":" + n.f4.accept(this) + "goto " + entryStack.get(entryStack.size()-1) + ";";
+		  _ret += " " +  "if(" + n.f2.accept(this) + ") goto " + newLabel + "; else goto " + exit + ";";
+		  _ret += " " +  newLabel + ":" + n.f4.accept(this) + "goto " + entry + ";";
 	  }
 	  else{
-	      _ret += n.f0.accept(this);
-	      _ret += n.f1.accept(this);
-	      _ret += n.f2.accept(this);
-	      _ret += n.f3.accept(this);
-	      _ret += n.f4.accept(this);  
+	      _ret += " " +  n.f0.accept(this);
+	      _ret += " " +  n.f1.accept(this);
+	      _ret += " " +  n.f2.accept(this);
+	      _ret += " " +  n.f3.accept(this);
+	      _ret += " " +  n.f4.accept(this);  
 	  }
 	  return _ret;
    }
@@ -579,24 +634,25 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(DoWhile n) {
       String _ret="";
       
-      if(whileUnwind){
+      if(whileUnwind && nestedBlock == 0){
     	  String newLabel = genName();
-    	  String oldEntry = entryStack.get(entryStack.size()-1);
-    	  entryStack.add(entryStack.size()-1, newLabel);
+
+    	  String oEntry = entry;
+    	  entry = newLabel;
     	  
-    	  _ret += n.f1.accept(this) + "goto " + newLabel + ";";
-    	  _ret += newLabel + ": if(" + n.f4.accept(this) 
-    	  			+ ") goto " + oldEntry
-    	  			+ "; else goto " + exitStack.get(exitStack.size()-1) + ";";	
+    	  _ret += " " +  n.f1.accept(this) + "goto " + newLabel + ";";
+    	  _ret += " " +  newLabel + ": if(" + n.f4.accept(this) 
+    	  			+ ") goto " + oEntry
+    	  			+ "; else goto " + exit + ";";	
       }
       else{
-          _ret += n.f0.accept(this);
-          _ret += n.f1.accept(this);
-          _ret += n.f2.accept(this);
-          _ret += n.f3.accept(this);
-          _ret += n.f4.accept(this);
-          _ret += n.f5.accept(this);
-          _ret += n.f6.accept(this);
+          _ret += " " +  n.f0.accept(this);
+          _ret += " " +  n.f1.accept(this);
+          _ret += " " +  n.f2.accept(this);
+          _ret += " " +  n.f3.accept(this);
+          _ret += " " +  n.f4.accept(this);
+          _ret += " " +  n.f5.accept(this);
+          _ret += " " +  n.f6.accept(this);
       }
       return _ret;
    }
@@ -607,8 +663,15 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(BreakStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      
+      if(whileUnwind && nestedBlock == 1){
+    	  _ret += " " +  "goto " + exit + ";";
+      }
+      else{
+          _ret += " " +  n.f0.accept(this);
+          _ret += " " +  n.f1.accept(this);  
+      }      
+      
       return _ret;
    }
 
@@ -618,8 +681,14 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ContinueStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      
+      if(whileUnwind && nestedBlock == 1){
+    	  _ret += " " +  "goto " + entry + ";";
+      }
+      else{
+          _ret += " " +  n.f0.accept(this);
+          _ret += " " +  n.f1.accept(this);    	  
+      }
       return _ret;
    }
 
@@ -630,9 +699,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ReturnStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
       return _ret;
    }
 
@@ -642,7 +711,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(IfStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -655,11 +724,19 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(IfThenStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
+      
+      if(ifUnwind && nestedBlock == 0){
+    	  String newLabel = genName();
+    	  _ret += " " +  "if(" + n.f2.accept(this) + ") goto " + newLabel + "; else goto " + exit + ";";
+    	  _ret += " " +  newLabel + ": " + n.f4.accept(this);
+      }
+      else{
+          _ret += " " +  n.f0.accept(this);
+          _ret += " " +  n.f1.accept(this);
+          _ret += " " +  n.f2.accept(this);
+          _ret += " " +  n.f3.accept(this);
+          _ret += " " +  n.f4.accept(this);
+      }
       return _ret;
    }
 
@@ -674,13 +751,24 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(IfThenElseStmt n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
-      _ret += n.f6.accept(this);
+
+      if(ifUnwind && nestedBlock == 0){
+    	  String tLabel = genName();
+    	  String fLabel = genName();
+    	  
+    	  _ret += " " +  "if(" + n.f2.accept(this) + ") goto " + tLabel + "; else goto " + fLabel + ";";
+    	  _ret += " " +  tLabel + ": " + n.f4.accept(this) + "goto " + exit + ";";
+    	  _ret += " " +  fLabel + ": " + n.f6.accept(this) + "goto " + exit + ";";
+      }
+      else{
+	      _ret += " " +  n.f0.accept(this);
+	      _ret += " " +  n.f1.accept(this);
+	      _ret += " " +  n.f2.accept(this);
+	      _ret += " " +  n.f3.accept(this);
+	      _ret += " " +  n.f4.accept(this);
+	      _ret += " " +  n.f5.accept(this);
+	      _ret += " " +  n.f6.accept(this);
+      }
       return _ret;
    }
 
@@ -694,17 +782,17 @@ public class Translator extends GJNoArguDepthFirst<String> {
     * f6 -> "}"
     */
    public String visit(SwitchStmt n) {
-       boolean flag = switchUnwind;
-	   
        String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
-      _ret += n.f4.accept(this);
-      _ret += n.f5.accept(this);
-      _ret += n.f6.accept(this);
-      return _ret;
+       nestedBlock++;
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
+      _ret += " " +  n.f4.accept(this);
+      _ret += " " +  n.f5.accept(this);
+      _ret += " " +  n.f6.accept(this);
+      nestedBlock--;
+       return _ret;
    }
 
    /**
@@ -712,20 +800,19 @@ public class Translator extends GJNoArguDepthFirst<String> {
     *       | <DFLT> ":" ( Statement() )*
     */
    public String visit(CaseStmt n) {
-      boolean flag = switchUnwind;
-      switchUnwind = false;
+	  boolean flag = (switchUnwind && nestedBlock == 1);
 	   
 	  String _ret="";
       if(flag){
     	  String newLabel = genName();
     	  int choice = n.f0.which;
     	  if(choice == 1){
-    		  _ret += "case " + ((Expression)((NodeSequence)n.f0.choice).elementAt(1)).accept(this) + ":" + "goto " + newLabel + ";";
-    		  caseAccumulator += newLabel + ":" + ((NodeListOptional)((NodeSequence)n.f0.choice).elementAt(3)).accept(this) + "goto " + exitStack.get(exitStack.size()-1) + ";";
+    		  _ret += " " +  "case " + ((Expression)((NodeSequence)n.f0.choice).elementAt(1)).accept(this) + ":" + "goto " + newLabel + ";";
+    		  caseAccumulator += newLabel + ":" + ((NodeListOptional)((NodeSequence)n.f0.choice).elementAt(3)).accept(this) + "goto " + exit + ";";
     	  }
     	  else{
-    		  _ret += "default " + ":" + "goto " + newLabel + ";";
-    		  caseAccumulator += newLabel + ":" + ((NodeListOptional)((NodeSequence)n.f0.choice).elementAt(2)).accept(this) + "goto " + exitStack.get(exitStack.size()-1) + ";";
+    		  _ret += " " +  "default " + ":" + "goto " + newLabel + ";";
+    		  caseAccumulator += newLabel + ":" + ((NodeListOptional)((NodeSequence)n.f0.choice).elementAt(2)).accept(this) + "goto " + exit + ";";
     	  }
       }
       else{
@@ -740,8 +827,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Label n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -751,8 +838,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(BinOp n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -778,7 +865,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Ops n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -795,7 +882,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(LeftUnary n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -805,7 +892,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(RightUnary n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -815,34 +902,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Expression n) {
       String _ret="";
-      if(n.f0.which == 1 && ((NodeToken)((LeftUnary)((NodeSequence)n.f0.choice).elementAt(0)).f0.choice).tokenImage == "++"){
-    	  _ret = "(" + ((PrimaryExpr)((NodeSequence)n.f0.choice).elementAt(1)).accept(this) + "+=1)";
-      }
-      else if(n.f0.which == 1 && ((NodeToken)((LeftUnary)((NodeSequence)n.f0.choice).elementAt(0)).f0.choice).tokenImage == "--"){
-    	  _ret = "(" + ((PrimaryExpr)((NodeSequence)n.f0.choice).elementAt(1)).accept(this) + "-=1)";
-      }
-      else if(n.f0.which == 0 && ((NodeOptional)((NodeSequence)n.f0.choice).elementAt(1)).present() 
-    		  && ((ExpressionContd)((NodeOptional)((NodeSequence)n.f0.choice).elementAt(1)).node).f0.which == 3){
-    	  
-    	  String symbol;
-    	  if(((NodeToken)((RightUnary)((ExpressionContd)((NodeOptional)((NodeSequence)n.f0.choice).elementAt(1)).node).f0.choice).f0.choice).tokenImage == "++")
-    		  symbol = "+";
-    	  else 
-    		  symbol = "-";
-		   
-    	  _ret = "(t=&"+ ((PrimaryExpr)((NodeSequence)n.f0.choice).elementAt(0)).accept(this) + ",t=*p,*p" + symbol + "=1,t)";
-      }
-      else if(n.f0.which == 0 && ((ExpressionContd)((NodeSequence)n.f0.choice).elementAt(1)).f0.which == 1 
-    		  && ((RHSAssignExpr)((ExpressionContd)((NodeSequence)n.f0.choice).elementAt(1)).f0.choice).f0.which != 0 ){
-    	  String rhs = ((Expression)((NodeSequence)((RHSAssignExpr)((ExpressionContd)((NodeSequence)n.f0.choice).elementAt(1)).f0.choice).f0.choice).elementAt(1)).accept(this);
-    	  String lhs = ((PrimaryExpr)((NodeSequence)n.f0.choice).elementAt(0)).accept(this);
-    	  String op = ((NodeToken)((NodeSequence)((RHSAssignExpr)((ExpressionContd)((NodeSequence)n.f0.choice).elementAt(1)).f0.choice).f0.choice).elementAt(0)).tokenImage;
-    	  _ret = "(p=&" + lhs + ",*p=*p" + op + rhs + ")";
-      }
-      else{
-    	  _ret += n.f0.accept(this);
-      }
-      
+      _ret += " " +  n.f0.accept(this);      
       return _ret;
    }
 
@@ -857,7 +917,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ExpressionContd n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -876,7 +936,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(RHSAssignExpr n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -888,10 +948,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(TernaryExpr n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
-      _ret += n.f2.accept(this);
-      _ret += n.f3.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
+      _ret += " " +  n.f2.accept(this);
+      _ret += " " +  n.f3.accept(this);
       return _ret;
    }
 
@@ -900,7 +960,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(ArrayLookup n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -910,8 +970,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(StructExpr n) {
       String _ret="";
-      _ret += n.f0.accept(this);
-      _ret += n.f1.accept(this);
+      _ret += " " +  n.f0.accept(this);
+      _ret += " " +  n.f1.accept(this);
       return _ret;
    }
 
@@ -921,7 +981,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(StructOps n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -935,7 +995,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(PrimaryExpr n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 
@@ -944,7 +1004,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(Identifier n) {
       String _ret="";
-      _ret += n.f0.accept(this);
+      _ret += " " +  n.f0.accept(this);
       return _ret;
    }
 

@@ -140,7 +140,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    /**
     * f0 -> Label()
     * f1 -> Statement()
-    * f2 -> GotoStmt()
+    * f2 -> [ GotoStmt() ]
     */
    public R visit(StatementUnit n) {
       R _ret=null;
@@ -419,7 +419,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public R visit(GotoStmt n) {
@@ -433,11 +433,11 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    /**
     * f0 -> <FOR>
     * f1 -> "("
-    * f2 -> Expression()
+    * f2 -> [ Expression() ]
     * f3 -> ";"
-    * f4 -> Expression()
+    * f4 -> [ Expression() ]
     * f5 -> ";"
-    * f6 -> Expression()
+    * f6 -> [ Expression() ]
     * f7 -> ")"
     * f8 -> Statement()
     */

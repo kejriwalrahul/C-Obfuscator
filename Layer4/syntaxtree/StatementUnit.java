@@ -8,14 +8,14 @@ package syntaxtree;
  * Grammar production:
  * f0 -> Label()
  * f1 -> Statement()
- * f2 -> GotoStmt()
+ * f2 -> [ GotoStmt() ]
  */
 public class StatementUnit implements Node {
    public Label f0;
    public Statement f1;
-   public GotoStmt f2;
+   public NodeOptional f2;
 
-   public StatementUnit(Label n0, Statement n1, GotoStmt n2) {
+   public StatementUnit(Label n0, Statement n1, NodeOptional n2) {
       f0 = n0;
       f1 = n1;
       f2 = n2;

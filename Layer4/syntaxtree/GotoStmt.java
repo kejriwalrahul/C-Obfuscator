@@ -7,21 +7,21 @@ package syntaxtree;
 /**
  * Grammar production:
  * f0 -> <GOTO>
- * f1 -> Label()
+ * f1 -> Identifier()
  * f2 -> ";"
  */
 public class GotoStmt implements Node {
    public NodeToken f0;
-   public Label f1;
+   public Identifier f1;
    public NodeToken f2;
 
-   public GotoStmt(NodeToken n0, Label n1, NodeToken n2) {
+   public GotoStmt(NodeToken n0, Identifier n1, NodeToken n2) {
       f0 = n0;
       f1 = n1;
       f2 = n2;
    }
 
-   public GotoStmt(Label n0) {
+   public GotoStmt(Identifier n0) {
       f0 = new NodeToken("goto");
       f1 = n0;
       f2 = new NodeToken(";");

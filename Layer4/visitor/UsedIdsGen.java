@@ -113,12 +113,13 @@ public class UsedIdsGen extends DepthFirstVisitor{
    /**
     * f0 -> Label()
     * f1 -> Statement()
-    * f2 -> GotoStmt()
+    * f2 -> [GotoStmt()]
     */
    public void visit(StatementUnit n) {
       n.f0.accept(this);
       n.f1.accept(this);
-      n.f2.accept(this);
+      if(n.f2.present())
+    	  n.f2.accept(this);
    }
 
    /**

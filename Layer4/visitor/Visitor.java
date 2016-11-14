@@ -72,7 +72,7 @@ public interface Visitor {
    /**
     * f0 -> Label()
     * f1 -> Statement()
-    * f2 -> GotoStmt()
+    * f2 -> [ GotoStmt() ]
     */
    public void visit(StatementUnit n);
 
@@ -233,7 +233,7 @@ public interface Visitor {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public void visit(GotoStmt n);
@@ -241,11 +241,11 @@ public interface Visitor {
    /**
     * f0 -> <FOR>
     * f1 -> "("
-    * f2 -> Expression()
+    * f2 -> [ Expression() ]
     * f3 -> ";"
-    * f4 -> Expression()
+    * f4 -> [ Expression() ]
     * f5 -> ";"
-    * f6 -> Expression()
+    * f6 -> [ Expression() ]
     * f7 -> ")"
     * f8 -> Statement()
     */
