@@ -78,7 +78,7 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
@@ -95,7 +95,7 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
@@ -325,7 +325,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public void visit(GotoStmt n) {
@@ -538,6 +538,9 @@ public class DepthFirstVisitor implements Visitor {
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "+"
+    *       | "-"
+    *       | "(" Type() ")"
     */
    public void visit(LeftUnary n) {
       n.f0.accept(this);

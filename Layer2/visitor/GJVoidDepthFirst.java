@@ -88,7 +88,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
@@ -105,7 +105,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    }
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
@@ -335,7 +335,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public void visit(GotoStmt n, A argu) {
@@ -548,6 +548,9 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "+"
+    *       | "-"
+    *       | "(" Type() ")"
     */
    public void visit(LeftUnary n, A argu) {
       n.f0.accept(this, argu);

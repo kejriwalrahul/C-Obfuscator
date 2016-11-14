@@ -102,7 +102,7 @@ void DeclarationStmt(): {}
 
 void FunctionDefinition() : {}
 {
-	TypeSpecifier()
+	Type()
 	Identifier()
 	"(" [ArgList()] ")"
 	Block()
@@ -110,7 +110,7 @@ void FunctionDefinition() : {}
 
 void FunctionDeclaration() : {}
 {
-	TypeSpecifier()
+	Type()
 	Identifier()
 	"(" [ParameterList()] ")"
 	";"
@@ -245,7 +245,7 @@ void Statement() : {}
 
 void GotoStmt() : {}
 {
-	<GOTO> Label() ";"
+	<GOTO> Identifier() ";"
 }
 
 void ForLoop() : {}
@@ -345,6 +345,9 @@ void LeftUnary() : {}
 	| "~"
 	| "*"
 	| "&"
+	| "+"
+	| "-"
+	| "(" Type() ")"
 }
 
 void RightUnary() : {}
@@ -356,7 +359,7 @@ void RightUnary() : {}
 
 void Expression() : {}
 {
-	PrimaryExpr() [ExpressionContd()]
+	LOOKAHEAD(PrimaryExpr())PrimaryExpr() [ExpressionContd()]
 	| LeftUnary() PrimaryExpr()
 }
 

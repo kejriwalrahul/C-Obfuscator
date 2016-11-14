@@ -6,7 +6,7 @@ package syntaxtree;
 
 /**
  * Grammar production:
- * f0 -> TypeSpecifier()
+ * f0 -> Type()
  * f1 -> Identifier()
  * f2 -> "("
  * f3 -> [ ParameterList() ]
@@ -14,14 +14,14 @@ package syntaxtree;
  * f5 -> ";"
  */
 public class FunctionDeclaration implements Node {
-   public TypeSpecifier f0;
+   public Type f0;
    public Identifier f1;
    public NodeToken f2;
    public NodeOptional f3;
    public NodeToken f4;
    public NodeToken f5;
 
-   public FunctionDeclaration(TypeSpecifier n0, Identifier n1, NodeToken n2, NodeOptional n3, NodeToken n4, NodeToken n5) {
+   public FunctionDeclaration(Type n0, Identifier n1, NodeToken n2, NodeOptional n3, NodeToken n4, NodeToken n5) {
       f0 = n0;
       f1 = n1;
       f2 = n2;
@@ -30,7 +30,7 @@ public class FunctionDeclaration implements Node {
       f5 = n5;
    }
 
-   public FunctionDeclaration(TypeSpecifier n0, Identifier n1, NodeOptional n2) {
+   public FunctionDeclaration(Type n0, Identifier n1, NodeOptional n2) {
       f0 = n0;
       f1 = n1;
       f2 = new NodeToken("(");

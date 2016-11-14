@@ -52,7 +52,7 @@ public interface Visitor {
    public void visit(DeclarationStmt n);
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ArgList() ]
@@ -62,7 +62,7 @@ public interface Visitor {
    public void visit(FunctionDefinition n);
 
    /**
-    * f0 -> TypeSpecifier()
+    * f0 -> Type()
     * f1 -> Identifier()
     * f2 -> "("
     * f3 -> [ ParameterList() ]
@@ -218,7 +218,7 @@ public interface Visitor {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public void visit(GotoStmt n);
@@ -359,6 +359,9 @@ public interface Visitor {
     *       | "~"
     *       | "*"
     *       | "&"
+    *       | "+"
+    *       | "-"
+    *       | "(" Type() ")"
     */
    public void visit(LeftUnary n);
 

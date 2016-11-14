@@ -55,13 +55,13 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    }
 
    public R visit(NodeSequence n, A argu) {
-      R _ret=null;
+      String _ret="";
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-         e.nextElement().accept(this,argu);
+         _ret += " " + e.nextElement().accept(this,argu);
          _count++;
       }
-      return _ret;
+      return (R)_ret;
    }
 
    public R visit(NodeToken n, A argu) { return null; }
@@ -802,7 +802,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
     */
    public R visit(LeftUnary n, A argu) {
       R _ret=null;
-      _ret = (R)((NodeToken)n.f0.choice).toString();
+      _ret = (R)n.f0.choice.toString();
       return _ret;
    }
 
@@ -888,7 +888,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
    public R visit(RHSAssignExpr n, A argu) {
       String _ret="";
       NodeSequence ns = (NodeSequence)n.f0.choice;
-      _ret = ((NodeToken)ns.elementAt(0)).toString() + " " + ((NodeToken)ns.elementAt(1)).accept(this, (A)"return").toString();
+      _ret = ns.elementAt(0).toString() + " " + ns.elementAt(1).accept(this, (A)"return").toString();
       return (R)_ret;
    }
 
