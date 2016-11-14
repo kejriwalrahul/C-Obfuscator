@@ -8,7 +8,7 @@ call("java ParserMain <../tmp/t1.c >../tmp/t2.c", shell=True)
 flag = True
 f = open("../tmp/count", "r")
 
-count = int(f.readline())
+count = int(f.readline())-1
 
 while count:
 	print "iterating"
