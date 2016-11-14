@@ -1,10 +1,15 @@
 all: 
-	cd Layer0 && javac CParser.java
-	cd Layer1 && javac ParserMain.java
-	cd Layer2 && javac ParserMain.java
-	cd Layer3 && javac ParserMain.java
-	cd Layer4 && javac ParserMain.java
-	cd Layer6 && javac ParserMain.java
+	$(MAKE) -C Layer0
+	$(MAKE) -C Layer1
+	$(MAKE) -C Layer2
+	$(MAKE) -C Layer3
+	$(MAKE) -C Layer4
+	$(MAKE) -C Layer6
 
 clean:
-	rm tmp/* Layer*/*.class Layer*/vistor/*.class Layer*/syntaxtree/*.class Layer*/helper/*.class
+	$(MAKE) -C Layer0 clean
+	$(MAKE) -C Layer1 clean
+	$(MAKE) -C Layer2 clean
+	$(MAKE) -C Layer3 clean
+	$(MAKE) -C Layer4 clean
+	$(MAKE) -C Layer6 clean
