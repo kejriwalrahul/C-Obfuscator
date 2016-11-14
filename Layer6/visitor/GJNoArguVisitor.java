@@ -389,6 +389,7 @@ public interface GJNoArguVisitor<R> {
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
+    *       | "(" Expression() ( "," Expression() )* ")"
     */
    public R visit(Expression n);
 

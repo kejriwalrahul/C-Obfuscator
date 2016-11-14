@@ -1517,6 +1517,17 @@ Expression Expression() :
    NodeSequence n5;
    LeftUnary n6;
    PrimaryExpr n7;
+   NodeSequence n8;
+   NodeToken n9;
+   Token n10;
+   Expression n11;
+   NodeListOptional n12 = new NodeListOptional();
+   NodeSequence n13;
+   NodeToken n14;
+   Token n15;
+   Expression n16;
+   NodeToken n17;
+   Token n18;
 
    
 }
@@ -1533,12 +1544,32 @@ Expression Expression() :
       { n1.addNode(n3); }
       { n0 = new NodeChoice(n1, 0); }
    |
-      { n5 = new NodeSequence(2); }
+      LOOKAHEAD(LeftUnary())
+      { n5 = new NodeSequence(3); }
       n6=LeftUnary()
       { n5.addNode(n6); }
       n7=PrimaryExpr()
       { n5.addNode(n7); }
       { n0 = new NodeChoice(n5, 1); }
+   |
+      { n8 = new NodeSequence(4); }
+      n10="(" { n9 = JTBToolkit.makeNodeToken(n10); }
+      { n8.addNode(n9); }
+      n11=Expression()
+      { n8.addNode(n11); }
+      (
+         { n13 = new NodeSequence(2); }
+         n15="," { n14 = JTBToolkit.makeNodeToken(n15); }
+         { n13.addNode(n14); }
+         n16=Expression()
+         { n13.addNode(n16); }
+         { n12.addNode(n13); }
+      )*
+      { n12.nodes.trimToSize(); }
+      { n8.addNode(n12); }
+      n18=")" { n17 = JTBToolkit.makeNodeToken(n18); }
+      { n8.addNode(n17); }
+      { n0 = new NodeChoice(n8, 2); }
    )
    
    { return new Expression(n0); }

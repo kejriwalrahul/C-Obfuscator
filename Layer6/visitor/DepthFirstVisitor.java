@@ -581,6 +581,7 @@ public class DepthFirstVisitor implements Visitor {
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
+    *       | "(" Expression() ( "," Expression() )* ")"
     */
    public void visit(Expression n) {
       n.f0.accept(this);

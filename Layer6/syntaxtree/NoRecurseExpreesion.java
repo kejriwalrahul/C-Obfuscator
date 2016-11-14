@@ -8,12 +8,11 @@ package syntaxtree;
  * Grammar production:
  * f0 -> PrimaryExpr() [ ExpressionContd() ]
  *       | LeftUnary() PrimaryExpr()
- *       | "(" Expression() ( "," Expression() )* ")"
  */
-public class Expression implements Node {
+public class NoRecurseExpreesion implements Node {
    public NodeChoice f0;
 
-   public Expression(NodeChoice n0) {
+   public NoRecurseExpreesion(NodeChoice n0) {
       f0 = n0;
    }
 

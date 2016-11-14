@@ -389,6 +389,7 @@ public interface GJVisitor<R,A> {
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
+    *       | "(" Expression() ( "," Expression() )* ")"
     */
    public R visit(Expression n, A argu);
 

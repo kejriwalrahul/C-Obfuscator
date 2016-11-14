@@ -389,6 +389,7 @@ public interface GJVoidVisitor<A> {
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
+    *       | "(" Expression() ( "," Expression() )* ")"
     */
    public void visit(Expression n, A argu);
 

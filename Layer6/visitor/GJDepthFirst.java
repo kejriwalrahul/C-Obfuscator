@@ -685,6 +685,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    /**
     * f0 -> PrimaryExpr() [ ExpressionContd() ]
     *       | LeftUnary() PrimaryExpr()
+    *       | "(" Expression() ( "," Expression() )* ")"
     */
    public R visit(Expression n, A argu) {
       R _ret=null;

@@ -370,7 +370,8 @@ void RightUnary() : {}
 void Expression() : {}
 {
 	LOOKAHEAD(PrimaryExpr()) PrimaryExpr() [ExpressionContd()]
-	| LeftUnary() PrimaryExpr()
+	| LOOKAHEAD(LeftUnary()) LeftUnary() PrimaryExpr()
+	| "(" Expression() ("," Expression())* ")"
 }
 
 void ExpressionContd() : {}
