@@ -11,6 +11,24 @@ import java.util.*;
  * order.  Your visitors may extend this class.
  */
 public class Translator extends GJNoArguDepthFirst<String> {
+   private boolean validParenthesis(String str) {
+   		if (!(str.startsWith("(") && (str.endsWith(")"))))
+   			return false;
+   		int count = 1;
+   		int size = str.length() - 1;
+   		int i = 0;
+   		for (; i<size && count != 0; ++i) {
+   			switch (str.charAt(i)) {
+   				case '(':
+   					++count;
+   					break;
+   				case ')':
+   					--count;
+   					break;
+   			}
+   		}
+   		return i == size;
+   }
    //
    // Auto class visitors--probably don't need to be overridden.
    //
@@ -521,7 +539,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -534,7 +552,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(AssignmentExpression n) {
        String _ret="";
       _ret = n.f0.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -557,7 +575,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -569,7 +587,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(ConstantExpression n) {
        String _ret="";
       _ret = n.f0.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -583,7 +601,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -597,7 +615,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -611,7 +629,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -625,7 +643,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -639,7 +657,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -653,7 +671,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -667,7 +685,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -681,7 +699,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -695,7 +713,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -709,7 +727,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -721,7 +739,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(CastExpression n) {
        String _ret="";
       _ret = n.f0.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -733,7 +751,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(UnaryExpression n) {
        String _ret="";
       _ret =  n.f0.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;
@@ -756,7 +774,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       _ret = n.f0.accept(this);
       _ret += n.f1.accept(this);
-      if (!(_ret.startsWith("(") && _ret.endsWith(")"))) {
+      if (!validParenthesis(_ret)) {
         _ret = "("+_ret+")";
       }
       return _ret;

@@ -4,8 +4,10 @@
 	# #include removal
 	python Preprocessor/preprocess.py <$1 >tmp/preproc.c
 	# Macro expansion
-	gcc -E tmp/preproc.c -o tmp/macroexp.c 
-	cd Layer1 && echo "Executing Layer1" && java ParserMain <../tmp/macroexp.c >../tmp/temp1.c
+	gcc -E tmp/preproc.c -o tmp/macroexp.c
+	cd Layer0 && echo "Executing Layer0" && java CParser < ../tmp/macroexp.c > ../tmp/temp0.c 
+	cd ..
+	cd Layer1 && echo "Executing Layer1" && java ParserMain <../tmp/temp0.c >../tmp/temp1.c
 	cd ..
 	cd Layer2 && echo "Executing Layer2" && java ParserMain <../tmp/temp1.c 	>../tmp/temp2.c
 	cd ..
@@ -16,5 +18,5 @@
 	# java ParserMain <../tmp/temp4.c 	>../tmp/temp5.c
 	# java ParserMain <../tmp/temp5.c 	>../tmp/temp6.c
 	# java ParserMain <../tmp/temp6.c 	>../tmp/temp7.c
-	cd ../Layer6 && echo "at layer 6" && java ParserMain < ../tmp/temp4.c > ../tmp/output.c
-	cd ../tmp && cat deps output.c >foutput.c
+	cd ../Layer6 && echo "Executing Layer6" && java ParserMain < ../tmp/temp4.c > ../tmp/temp5.c
+	cd ../tmp && cat deps temp5.c >output.c
