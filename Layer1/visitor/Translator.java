@@ -504,7 +504,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public String visit(GotoStmt n) {

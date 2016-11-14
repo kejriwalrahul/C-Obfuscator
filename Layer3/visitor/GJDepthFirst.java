@@ -12,31 +12,31 @@ import java.util.*;
  */
 public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
-	private HashSet<String> lineNos;
-	private String prevLine;
-	private Random rand;
-	private char[] alphaNumeric;
-	private String startLine;
+  private HashSet<String> lineNos;
+  private String prevLine;
+  private Random rand;
+  private char[] alphaNumeric;
+  private String startLine;
 
-	private String getNewLine() {
-		String temp;
-		do{
-			temp = "L";
-			for (int i=0; i<6; ++i) {
-				temp += alphaNumeric[rand.nextInt(36)];
-			}
-		} while (lineNos.contains(temp));
-		lineNos.add(temp);
-		return temp;
-	}
+  private String getNewLine() {
+    String temp;
+    do{
+      temp = "L";
+      for (int i=0; i<6; ++i) {
+        temp += alphaNumeric[rand.nextInt(36)];
+      }
+    } while (lineNos.contains(temp));
+    lineNos.add(temp);
+    return temp;
+  }
 
-	public GJDepthFirst() {
-		lineNos = new HashSet<String>();
-		rand = new Random();
-		alphaNumeric = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
-		prevLine = getNewLine();
-		startLine = prevLine;
-	}
+  public GJDepthFirst() {
+    lineNos = new HashSet<String>();
+    rand = new Random();
+    alphaNumeric = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+    prevLine = getNewLine();
+    startLine = prevLine;
+  }
 
    //
    // Auto class visitors--probably don't need to be overridden.
@@ -133,7 +133,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.println(";");
+        System.out.println(";");
       }
       return _ret;
    }
@@ -151,13 +151,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print("(");
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-      	System.out.print(")");
+        System.out.print("(");
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        System.out.print(")");
       } else {
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
       }
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
@@ -178,13 +178,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print("(");
+        System.out.print("(");
       }
       n.f3.accept(this, argu);
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.println(");");
+        System.out.println(");");
       }
       return _ret;
    }
@@ -197,13 +197,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	int size = n.f1.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print(",");
-      		n.f1.elementAt(i).accept(this, argu);
-      	}
+        int size = n.f1.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print(",");
+          n.f1.elementAt(i).accept(this, argu);
+        }
       } else {
-      	n.f1.accept(this, argu);
+        n.f1.accept(this, argu);
       }
       return _ret;
    }
@@ -230,19 +230,19 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(StructDeclaration n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(" struct ");
-      	n.f1.accept(this, argu);
-      	System.out.print("{");
-      	n.f3.accept(this, argu);
-      	System.out.println("};");
+        System.out.print(" struct ");
+        n.f1.accept(this, argu);
+        System.out.print("{");
+        n.f3.accept(this, argu);
+        System.out.println("};");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	      n.f5.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -255,14 +255,14 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(TypeDef n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(" typedef ");
+        System.out.print(" typedef ");
       }
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       n.f2.accept(this, argu);
       n.f3.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.println(";");
+        System.out.println(";");
       }
       return _ret;
    }
@@ -279,25 +279,25 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(EnumDeclaration n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(" enum ");
-      	n.f1.accept(this, argu);
-      	System.out.print("{");
-      	n.f3.accept(this, argu);
-      	int size = n.f4.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print(",");
-      		n.f4.elementAt(i).accept(this, argu);
-      	}
-      	System.out.println("};");
+        System.out.print(" enum ");
+        n.f1.accept(this, argu);
+        System.out.print("{");
+        n.f3.accept(this, argu);
+        int size = n.f4.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print(",");
+          n.f4.elementAt(i).accept(this, argu);
+        }
+        System.out.println("};");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	      n.f5.accept(this, argu);
-	      n.f6.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);
+        n.f6.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -313,27 +313,27 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" main (");
-      	if (n.f3.present()) {
-      		System.out.print(" int ");
-      		NodeSequence seq = (NodeSequence)n.f3.node;
-      		seq.elementAt(1).accept(this, argu);
-      		System.out.print(", char *");
-      		if (((NodeOptional)seq.elementAt(5)).present()) {
-      			System.out.print("*");
-      		}
-      		seq.elementAt(6).accept(this, argu);
-      		if (((NodeOptional)seq.elementAt(7)).present()) {
-      			System.out.print("[]");
-      		}
-      	}
-      	System.out.print(")");
+        System.out.print(" main (");
+        if (n.f3.present()) {
+          System.out.print(" int ");
+          NodeSequence seq = (NodeSequence)n.f3.node;
+          seq.elementAt(1).accept(this, argu);
+          System.out.print(", char *");
+          if (((NodeOptional)seq.elementAt(5)).present()) {
+            System.out.print("*");
+          }
+          seq.elementAt(6).accept(this, argu);
+          if (((NodeOptional)seq.elementAt(7)).present()) {
+            System.out.print("[]");
+          }
+        }
+        System.out.print(")");
       } else {
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	  }
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+    }
       n.f5.accept(this, argu);
       return _ret;
    }
@@ -346,13 +346,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	int size = n.f1.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print("*");
-      	}
+        int size = n.f1.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print("*");
+        }
       } else {
-	      n.f1.accept(this, argu);
-	  }
+        n.f1.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -374,7 +374,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" static ");
+        System.out.print(" static ");
       }
       return _ret;
    }
@@ -396,16 +396,16 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(TypeSpecifier n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	if (n.f0.which <= 8) {
-      		System.out.print(" "+n.f0.choice.toString()+" ");
-      	} else {
-      		if (n.f0.which != 9) {
-      			System.out.print(" "+((NodeSequence)n.f0.choice).elementAt(0).toString()+" ");
-      		}
-      		n.f0.accept(this, argu);
-      	}
+        if (n.f0.which <= 8) {
+          System.out.print(" "+n.f0.choice.toString()+" ");
+        } else {
+          if (n.f0.which != 9) {
+            System.out.print(" "+((NodeSequence)n.f0.choice).elementAt(0).toString()+" ");
+          }
+          n.f0.accept(this, argu);
+        }
       } else {
-      	n.f0.accept(this, argu);
+        n.f0.accept(this, argu);
       }
       return _ret;
    }
@@ -418,13 +418,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	int size = n.f1.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print(",");
-      		n.f1.elementAt(i).accept(this, argu);
-      	}
+        int size = n.f1.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print(",");
+          n.f1.elementAt(i).accept(this, argu);
+        }
       } else {
-      	n.f1.accept(this, argu);
+        n.f1.accept(this, argu);
       }
       return _ret;
    }
@@ -448,7 +448,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" "+n.f0.choice.toString()+" ");
+        System.out.print(" "+n.f0.choice.toString()+" ");
       }
       return _ret;
    }
@@ -461,13 +461,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	int size = n.f1.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print(",");
-      		n.f1.elementAt(i).accept(this, argu);
-      	}
+        int size = n.f1.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print(",");
+          n.f1.elementAt(i).accept(this, argu);
+        }
       } else {
-      	n.f1.accept(this, argu);
+        n.f1.accept(this, argu);
       }
       return _ret;
    }
@@ -481,27 +481,27 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(ObjectType n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	int size = n.f0.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print("*");
-      	}
-      	n.f1.accept(this, argu);
-      	int size2 = n.f2.size();
-      	for (int i=0; i<size2; ++i) {
-      		System.out.print("[");
-      		((NodeSequence)n.f2.elementAt(i)).elementAt(1).accept(this, argu);
-      		System.out.print("]");
-      	}
-      	if (n.f3.present()) {
-      		System.out.print(" = ");
-      		n.f3.accept(this, argu);
-      	}
+        int size = n.f0.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print("*");
+        }
+        n.f1.accept(this, argu);
+        int size2 = n.f2.size();
+        for (int i=0; i<size2; ++i) {
+          System.out.print("[");
+          ((NodeSequence)n.f2.elementAt(i)).elementAt(1).accept(this, argu);
+          System.out.print("]");
+        }
+        if (n.f3.present()) {
+          System.out.print(" = ");
+          n.f3.accept(this, argu);
+        }
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -513,19 +513,19 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(Block n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = (Integer)argu + 1;
-      	System.out.println("{");
-      	n.f1.accept(this, (A)arg);
-      	if (arg == 2) {
-      		System.out.println(" "+prevLine+": ;");
-      		prevLine = getNewLine();
-      	}
-      	System.out.println("}");
+        Integer arg = (Integer)argu + 1;
+        System.out.println("{");
+        n.f1.accept(this, (A)arg);
+        if (arg == 2) {
+          System.out.println(" "+prevLine+": ;");
+          prevLine = getNewLine();
+        }
+        System.out.println("}");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -556,45 +556,45 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(Statement n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	if ((Integer)argu <= 2 && n.f0.which != 9 && n.f0.which != 3) {
-	      	System.out.print("\n "+prevLine+": ");
-	      	prevLine = getNewLine();
-	     }
-      	String temp = prevLine;
-      	if (n.f0.which == 10) {
-      		n.f0.choice.accept(this, argu);
-      		System.out.println(";");
-      	} else if (n.f0.which == 12) {
-      		System.out.println(";");
-      	} else {
-      		n.f0.accept(this, argu);
-      	}
-      	if ((Integer)argu <= 2 && n.f0.which != 9 && n.f0.which != 3) {
-      		System.out.println(" goto "+temp+";");
-      		prevLine = temp;
-      	}
+        if ((Integer)argu <= 2 && n.f0.which != 9 && n.f0.which != 3) {
+          System.out.print("\n "+prevLine+": ");
+          prevLine = getNewLine();
+       }
+        String temp = prevLine;
+        if (n.f0.which == 10) {
+          n.f0.choice.accept(this, argu);
+          System.out.println(";");
+        } else if (n.f0.which == 12) {
+          System.out.println(";");
+        } else {
+          n.f0.accept(this, argu);
+        }
+        if ((Integer)argu <= 2 && n.f0.which != 9 && n.f0.which != 3) {
+          System.out.println(" goto "+temp+";");
+          prevLine = temp;
+        }
       } else {
-      	n.f0.accept(this, argu);
+        n.f0.accept(this, argu);
       }
       return _ret;
    }
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public R visit(GotoStmt n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(" goto ");
-      	n.f1.accept(this, argu);
-      	System.out.print(";");
+        System.out.print(" goto ");
+        n.f1.accept(this, argu);
+        System.out.print(";");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -612,26 +612,26 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(ForLoop n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = 3;
-      	System.out.print(" for (");
-      	n.f2.accept(this, (A)arg);
-      	System.out.print(";");
-      	n.f4.accept(this, (A)arg);
-      	System.out.print(";");
-      	n.f6.accept(this, (A)arg);
-      	System.out.print(")");
-      	n.f8.accept(this, (A)arg);
+        Integer arg = 3;
+        System.out.print(" for (");
+        n.f2.accept(this, (A)arg);
+        System.out.print(";");
+        n.f4.accept(this, (A)arg);
+        System.out.print(";");
+        n.f6.accept(this, (A)arg);
+        System.out.print(")");
+        n.f8.accept(this, (A)arg);
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	      n.f5.accept(this, argu);
-	      n.f6.accept(this, argu);
-	      n.f7.accept(this, argu);
-	      n.f8.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);
+        n.f6.accept(this, argu);
+        n.f7.accept(this, argu);
+        n.f8.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -645,16 +645,16 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(WhileLoop n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = 3;
-      	System.out.print(" while (");
-      	n.f2.accept(this, (A)arg);
-      	System.out.print(")");
+        Integer arg = 3;
+        System.out.print(" while (");
+        n.f2.accept(this, (A)arg);
+        System.out.print(")");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+    }
       n.f4.accept(this, argu);
       return _ret;
    }
@@ -671,21 +671,21 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(DoWhile n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = 3;
-      	System.out.print(" do");
-      	n.f1.accept(this, (A)arg);
-      	System.out.print(" while (");
-      	n.f4.accept(this, (A)arg);
-      	System.out.print(");");
+        Integer arg = 3;
+        System.out.print(" do");
+        n.f1.accept(this, (A)arg);
+        System.out.print(" while (");
+        n.f4.accept(this, (A)arg);
+        System.out.print(");");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	      n.f5.accept(this, argu);
-	      n.f6.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);
+        n.f6.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -698,7 +698,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" break;");
+        System.out.print(" break;");
       }
       return _ret;
    }
@@ -712,7 +712,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" continue;");
+        System.out.print(" continue;");
       }
       return _ret;
    }
@@ -725,13 +725,13 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(ReturnStmt n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(" return ");
-      	n.f1.accept(this, argu);
-      	System.out.println(";");
+        System.out.print(" return ");
+        n.f1.accept(this, argu);
+        System.out.println(";");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
       }
       return _ret;
    }
@@ -756,15 +756,15 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(IfThenStmt n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = 3;
-      	System.out.print("if( ");
-      	n.f2.accept(this, (A)arg);
-      	System.out.print(")");
+        Integer arg = 3;
+        System.out.print("if( ");
+        n.f2.accept(this, (A)arg);
+        System.out.print(")");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
       }
       n.f4.accept(this, argu);
       return _ret;
@@ -782,19 +782,19 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(IfThenElseStmt n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = 3;
-      		System.out.print("if(");
-      		n.f2.accept(this, (A)arg);
-      		System.out.print(")");
-      		n.f4.accept(this, (A)arg);
-      		System.out.print(" else ");
+        Integer arg = 3;
+          System.out.print("if(");
+          n.f2.accept(this, (A)arg);
+          System.out.print(")");
+          n.f4.accept(this, (A)arg);
+          System.out.print(" else ");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	      n.f5.accept(this, argu);	
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);  
       }
       n.f6.accept(this, argu);
       return _ret;
@@ -812,21 +812,21 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(SwitchStmt n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	Integer arg = 3;
-      	System.out.print("switch (");
-      	n.f2.accept(this, (A)arg);
-      	System.out.println(") {");
-      	n.f5.accept(this, (A)arg);
-      	System.out.println("}");
+        Integer arg = 3;
+        System.out.print("switch (");
+        n.f2.accept(this, (A)arg);
+        System.out.println(") {");
+        n.f5.accept(this, (A)arg);
+        System.out.println("}");
       } else {
-	      n.f0.accept(this, argu);
-	      n.f1.accept(this, argu);
-	      n.f2.accept(this, argu);
-	      n.f3.accept(this, argu);
-	      n.f4.accept(this, argu);
-	      n.f5.accept(this, argu);
-	      n.f6.accept(this, argu);
-	  }
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);
+        n.f6.accept(this, argu);
+    }
       return _ret;
    }
 
@@ -837,25 +837,25 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(CaseStmt n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	if (n.f0.which == 0) {
-      		System.out.print("CASE ");
-      		((NodeSequence)n.f0.choice).elementAt(1).accept(this, argu);
-      		System.out.print(":");
-      		int size2 = ((NodeSequence)((NodeSequence)n.f0.choice).elementAt(3)).size();
-      		NodeSequence temp = (NodeSequence)((NodeSequence)n.f0.choice).elementAt(3);
-      		for (int i=0; i<size2; ++i) {
-      			temp.elementAt(i).accept(this, argu);
-      		}
-      	} else {
-      		System.out.print("DEFAULT :");
-      		int size = ((NodeSequence)((NodeSequence)n.f0.choice).elementAt(2)).size();
-      		NodeSequence seq = (NodeSequence)((NodeSequence)n.f0.choice).elementAt(2);
-      		for (int i=0; i<size; ++i) {
-      			seq.elementAt(i).accept(this, argu);
-      		}
-      	}
+        if (n.f0.which == 0) {
+          System.out.print("CASE ");
+          ((NodeSequence)n.f0.choice).elementAt(1).accept(this, argu);
+          System.out.print(":");
+          int size2 = ((NodeSequence)((NodeSequence)n.f0.choice).elementAt(3)).size();
+          NodeSequence temp = (NodeSequence)((NodeSequence)n.f0.choice).elementAt(3);
+          for (int i=0; i<size2; ++i) {
+            temp.elementAt(i).accept(this, argu);
+          }
+        } else {
+          System.out.print("DEFAULT :");
+          int size = ((NodeSequence)((NodeSequence)n.f0.choice).elementAt(2)).size();
+          NodeSequence seq = (NodeSequence)((NodeSequence)n.f0.choice).elementAt(2);
+          for (int i=0; i<size; ++i) {
+            seq.elementAt(i).accept(this, argu);
+          }
+        }
       } else {
-      	n.f0.accept(this, argu);
+        n.f0.accept(this, argu);
       }
       return _ret;
    }
@@ -869,7 +869,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
       if (argu == null) {
-      	System.out.print(":");
+        System.out.print(":");
       }
       return _ret;
    }
@@ -908,7 +908,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(Ops n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(n.f0.choice.toString());
+        System.out.print(n.f0.choice.toString());
       }
       n.f0.accept(this, argu);
       return _ret;
@@ -928,15 +928,15 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(LeftUnary n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	if (n.f0.which != 8) {
-      		System.out.print(" "+n.f0.choice.toString());
-      	} else {
-      		System.out.print("(");
-      		((NodeSequence)n.f0.choice).elementAt(1).accept(this, argu);
-      		System.out.print(") ");
-      	}
+        if (n.f0.which != 8) {
+          System.out.print(" "+n.f0.choice.toString());
+        } else {
+          System.out.print("(");
+          ((NodeSequence)n.f0.choice).elementAt(1).accept(this, argu);
+          System.out.print(") ");
+        }
       } else {
-      	n.f0.accept(this, argu);
+        n.f0.accept(this, argu);
       }
       return _ret;
    }
@@ -948,7 +948,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(RightUnary n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(n.f0.choice.toString()+" ");
+        System.out.print(n.f0.choice.toString()+" ");
       }
       n.f0.accept(this, argu);
       return _ret;
@@ -976,20 +976,20 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(ExpressionContd n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0 && n.f0.which == 1) {
-      	System.out.print(" ( ");
-      	NodeOptional temp = (NodeOptional)((NodeSequence)n.f0.choice).elementAt(1); 
-      	if (temp.present()) {
-      		((NodeSequence)temp.node).elementAt(0).accept(this,argu);
-      		NodeListOptional seq = (NodeListOptional)((NodeSequence)temp.node).elementAt(1);
-      		int size = seq.size();
-      		for (int i=0; i<size; ++i) {
-      			System.out.print(",");
-      			seq.elementAt(i).accept(this,argu);
-      		}
-      	}
-      	System.out.print(" ) ");
+        System.out.print(" ( ");
+        NodeOptional temp = (NodeOptional)((NodeSequence)n.f0.choice).elementAt(1); 
+        if (temp.present()) {
+          ((NodeSequence)temp.node).elementAt(0).accept(this,argu);
+          NodeListOptional seq = (NodeListOptional)((NodeSequence)temp.node).elementAt(1);
+          int size = seq.size();
+          for (int i=0; i<size; ++i) {
+            System.out.print(",");
+            seq.elementAt(i).accept(this,argu);
+          }
+        }
+        System.out.print(" ) ");
       } else {
-      	n.f0.accept(this, argu);
+        n.f0.accept(this, argu);
       }
       return _ret;
    }
@@ -1010,7 +1010,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(RHSAssignExpr n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	System.out.print(" "+((NodeSequence)n.f0.choice).elementAt(0).toString()+" ");
+        System.out.print(" "+((NodeSequence)n.f0.choice).elementAt(0).toString()+" ");
       }
       n.f0.accept(this, argu);
       return _ret;
@@ -1026,15 +1026,15 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" ? ");
-	    n.f1.accept(this, argu);
-	    n.f2.accept(this, argu);
-	    System.out.print(" : ");
-	    n.f3.accept(this, argu);
+        System.out.print(" ? ");
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      System.out.print(" : ");
+      n.f3.accept(this, argu);
       } else {
-	    n.f1.accept(this, argu);
-	    n.f2.accept(this, argu);
-	    n.f3.accept(this, argu);
+      n.f1.accept(this, argu);
+      n.f2.accept(this, argu);
+      n.f3.accept(this, argu);
       }
       return _ret;
    }
@@ -1045,14 +1045,14 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(ArrayLookup n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0) {
-      	int size = n.f0.size();
-      	for (int i=0; i<size; ++i) {
-      		System.out.print(" [ ");
-      		((NodeSequence)n.f0.elementAt(i)).elementAt(1).accept(this, argu);
-      		System.out.print(" ] ");
-      	}
+        int size = n.f0.size();
+        for (int i=0; i<size; ++i) {
+          System.out.print(" [ ");
+          ((NodeSequence)n.f0.elementAt(i)).elementAt(1).accept(this, argu);
+          System.out.print(" ] ");
+        }
       } else {
-      	n.f0.accept(this, argu);      	
+        n.f0.accept(this, argu);        
       }
       return _ret;
    }
@@ -1076,7 +1076,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(n.f0.toString());
+        System.out.print(n.f0.toString());
       }
       return _ret;
    }
@@ -1092,11 +1092,11 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    public R visit(PrimaryExpr n, A argu) {
       R _ret=null;
       if ((Integer)argu != 0 && n.f0.which == 1) {
-      	System.out.print(" ( ");
-      	n.f0.accept(this, argu);
-      	System.out.print(" ) ");
+        System.out.print(" ( ");
+        n.f0.accept(this, argu);
+        System.out.print(" ) ");
       } else {
-      	n.f0.accept(this, argu);
+        n.f0.accept(this, argu);
       }
       return _ret;
    }
@@ -1108,7 +1108,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" "+n.f0.toString()+" ");
+        System.out.print(" "+n.f0.toString()+" ");
       }
       return _ret;
    }
@@ -1120,7 +1120,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" "+n.f0.toString()+" ");
+        System.out.print(" "+n.f0.toString()+" ");
       }
       return _ret;
    }
@@ -1132,7 +1132,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" "+n.f0.toString()+" ");
+        System.out.print(" "+n.f0.toString()+" ");
       }
       return _ret;
    }
@@ -1144,9 +1144,9 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" "+n.f0.toString()+" ");
+        System.out.print(" "+n.f0.toString()+" ");
       } else if ((Integer)argu == 0){
-      	lineNos.add(n.f0.toString());
+        lineNos.add(n.f0.toString());
       }
       return _ret;
    }
@@ -1158,7 +1158,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       if ((Integer)argu != 0) {
-      	System.out.print(" "+n.f0.toString()+" ");
+        System.out.print(" "+n.f0.toString()+" ");
       }
       return _ret;
    }

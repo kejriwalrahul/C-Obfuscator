@@ -245,7 +245,7 @@ void Statement() : {}
 
 void GotoStmt() : {}
 {
-	<GOTO> Label() ";"
+	<GOTO> Identifier() ";"
 }
 
 void ForLoop() : {}

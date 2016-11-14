@@ -922,7 +922,7 @@ GotoStmt GotoStmt() :
 {
    NodeToken n0;
    Token n1;
-   Label n2;
+   Identifier n2;
    NodeToken n3;
    Token n4;
 
@@ -930,7 +930,7 @@ GotoStmt GotoStmt() :
 }
 {
    n1=<GOTO> { n0 = JTBToolkit.makeNodeToken(n1); }
-   n2=Label()
+   n2=Identifier()
    n4=";" { n3 = JTBToolkit.makeNodeToken(n4); }
    
    { return new GotoStmt(n0,n2,n3); }

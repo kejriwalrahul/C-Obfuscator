@@ -218,7 +218,7 @@ public interface GJVoidVisitor<A> {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public void visit(GotoStmt n, A argu);

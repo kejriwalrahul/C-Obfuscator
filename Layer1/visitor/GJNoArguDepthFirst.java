@@ -391,7 +391,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public R visit(GotoStmt n) {

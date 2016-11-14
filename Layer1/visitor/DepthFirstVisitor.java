@@ -325,7 +325,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * f0 -> <GOTO>
-    * f1 -> Label()
+    * f1 -> Identifier()
     * f2 -> ";"
     */
    public void visit(GotoStmt n) {

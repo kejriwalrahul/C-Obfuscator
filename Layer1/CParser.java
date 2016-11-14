@@ -1116,12 +1116,12 @@ public class CParser implements CParserConstants {
   static final public GotoStmt GotoStmt() throws ParseException {
    NodeToken n0;
    Token n1;
-   Label n2;
+   Identifier n2;
    NodeToken n3;
    Token n4;
     n1 = jj_consume_token(GOTO);
                n0 = JTBToolkit.makeNodeToken(n1);
-    n2 = Label();
+    n2 = Identifier();
     n4 = jj_consume_token(55);
             n3 = JTBToolkit.makeNodeToken(n4);
      {if (true) return new GotoStmt(n0,n2,n3);}
@@ -3192,7 +3192,7 @@ public class CParser implements CParserConstants {
 
   static private boolean jj_3R_101() {
     if (jj_scan_token(GOTO)) return true;
-    if (jj_3R_25()) return true;
+    if (jj_3R_24()) return true;
     if (jj_scan_token(55)) return true;
     return false;
   }
@@ -3966,18 +3966,21 @@ public class CParser implements CParserConstants {
       for (int i = 0; i < jj_endpos; i++) {
         jj_expentry[i] = jj_lasttokens[i];
       }
-      jj_entries_loop: for (java.util.Iterator<?> it = jj_expentries.iterator(); it.hasNext();) {
+      boolean exists = false;
+      for (java.util.Iterator<?> it = jj_expentries.iterator(); it.hasNext();) {
+        exists = true;
         int[] oldentry = (int[])(it.next());
         if (oldentry.length == jj_expentry.length) {
           for (int i = 0; i < jj_expentry.length; i++) {
             if (oldentry[i] != jj_expentry[i]) {
-              continue jj_entries_loop;
+              exists = false;
+              break;
             }
           }
-          jj_expentries.add(jj_expentry);
-          break jj_entries_loop;
+          if (exists) break;
         }
       }
+      if (!exists) jj_expentries.add(jj_expentry);
       if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
     }
   }
