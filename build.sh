@@ -18,4 +18,5 @@
 	# java ParserMain <../tmp/temp4.c 	>../tmp/temp5.c
 	# java ParserMain <../tmp/temp5.c 	>../tmp/temp6.c
 	# java ParserMain <../tmp/temp6.c 	>../tmp/temp7.c
-	cd ../Layer6 && echo "Executing Layer6" && java ParserMain < ../tmp/temp4.c > ../tmp/output.c
+	cd ../Layer6 && echo "Executing Layer6" && java ParserMain < ../tmp/temp4.c > ../tmp/temp5.c
+	cd ../tmp && cat deps temp5.c >output.c
