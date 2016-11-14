@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class Translator extends GJNoArguDepthFirst<String> {
    private boolean validParenthesis(String str) {
-   		if (!(str.startsWith("(") && (str.endsWith(")")))
+   		if (!(str.startsWith("(") && (str.endsWith(")"))))
    			return false;
    		int count = 1;
    		int size = str.length() - 1;
@@ -27,7 +27,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    					break;
    			}
    		}
-   		return i != size;
+   		return i == size;
    }
    //
    // Auto class visitors--probably don't need to be overridden.
