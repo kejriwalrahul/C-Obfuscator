@@ -228,7 +228,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
       String exitLabel = "";
       if(n.f2.present())
     	  exitLabel = ((GotoStmt)n.f2.node).f1.f0.tokenImage;
-      
+      else
+        exitLabel = genName();
+
       // For, while, dowhile, switch statements
       // for break and continue transformaation
       if(choice == 0 || choice == 1 || choice == 2 || choice == 4 || choice == 5){
@@ -497,9 +499,9 @@ public class Translator extends GJNoArguDepthFirst<String> {
       nestedBlock++;
 	   
 	  String _ret="";
-	  if(!blockUnwind)	  _ret += " " +  n.f0.accept(this);
+	  if(!(blockUnwind && nestedBlock == 1))	  _ret += " " +  n.f0.accept(this);
       _ret += " " +  n.f1.accept(this);
-      if(!blockUnwind)	  _ret += " " +  n.f2.accept(this);
+      if(!(blockUnwind && nestedBlock == 1))	_ret += " " +  n.f2.accept(this);
 
       nestedBlock--;
       return _ret;
@@ -581,7 +583,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     	  _ret += " " +  e1 + "; goto " + s1 + ";";
     	  _ret += " " +  s1 + ": if(" + e2 + ") goto " + s2 + "; else goto " + exit + ";";
     	  _ret += " " +  s2 + ":" + n.f8.accept(this) + "goto " + s3    + ";";
-    	  _ret += " " +  s3 + ":" + e3 + "; goto " + s1    + ";";    	  
+    	  _ret += " " +  s3 + ":" + e3 + "; goto " + s1    + ";" + genName() + ":";    	  
       }
       else{
           _ret += " " +  n.f0.accept(this);
@@ -758,7 +760,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     	  
     	  _ret += " " +  "if(" + n.f2.accept(this) + ") goto " + tLabel + "; else goto " + fLabel + ";";
     	  _ret += " " +  tLabel + ": " + n.f4.accept(this) + "goto " + exit + ";";
-    	  _ret += " " +  fLabel + ": " + n.f6.accept(this) + "goto " + exit + ";";
+    	  _ret += " " +  fLabel + ": " + n.f6.accept(this);
       }
       else{
 	      _ret += " " +  n.f0.accept(this);
