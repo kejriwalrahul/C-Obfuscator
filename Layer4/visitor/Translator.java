@@ -12,10 +12,7 @@ import java.util.*;
  */
 public class Translator extends GJNoArguDepthFirst<String> {
    public HashSet<String> used;
-   
-   ArrayList<String> entryStack = new ArrayList<String>();
-   ArrayList<String> exitStack  = new ArrayList<String>();
-   
+
    boolean blockUnwind = false;
    boolean ifUnwind = false;
    boolean switchUnwind  = false;
@@ -61,17 +58,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
 		   }
 	   }
    }
-   
-   void pushEntryExit(String entry, String exit){
-	   entryStack.add(entry);
-	   exitStack.add(exit);
-   }
-   
-   void popEntryExit(){
-	   entryStack.remove(entryStack.size()-1);
-	   exitStack.remove(exitStack.size()-1);
-   }
-   
+      
    //
    // Auto class visitors--probably don't need to be overridden.
    //
@@ -229,7 +216,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
       if(n.f2.present())
     	  exitLabel = ((GotoStmt)n.f2.node).f1.f0.tokenImage;
       else
-        exitLabel = genName();
+        exitLabel = entryLabel;
 
       // For, while, dowhile, switch statements
       // for break and continue transformaation
