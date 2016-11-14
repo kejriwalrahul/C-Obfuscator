@@ -461,7 +461,7 @@ public class Pass2<R,A> implements GJVisitor<R,A> {
     */
    public R visit(Statement n, A argu) {
       String _ret="";
-      _ret = n.f0.accept(this, argu).toString();
+      _ret = n.f0.accept(this, null).toString();
       return (R)_ret;
    }
 

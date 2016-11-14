@@ -151,7 +151,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(TypeQualifier n) {
        String _ret="";
-      _ret = n.f0.accept(this);
+      // _ret = n.f0.accept(this);
       return _ret;
    }
 

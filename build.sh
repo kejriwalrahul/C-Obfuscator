@@ -13,6 +13,7 @@
 	cd ..
 	echo "Assuming max 4 layer recursive block depth"
 	cd Layer4 && echo "Executing Layer4" && java ParserMain <../tmp/temp3.c 	>../tmp/temp4.c
-	java ParserMain <../tmp/temp4.c 	>../tmp/temp5.c
-	java ParserMain <../tmp/temp5.c 	>../tmp/temp6.c
-	java ParserMain <../tmp/temp6.c 	>../tmp/temp7.c
+	# java ParserMain <../tmp/temp4.c 	>../tmp/temp5.c
+	# java ParserMain <../tmp/temp5.c 	>../tmp/temp6.c
+	# java ParserMain <../tmp/temp6.c 	>../tmp/temp7.c
+	cd ../Layer6 && echo "at layer 6" && java ParserMain < ../tmp/temp4.c > ../tmp/output.c
