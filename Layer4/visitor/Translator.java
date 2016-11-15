@@ -599,7 +599,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
 	  if(whileUnwind && nestedBlock == 0){
 		  String newLabel = genName();
 		  _ret += " " +  "if(" + n.f2.accept(this) + ") goto " + newLabel + "; else goto " + exit + ";";
-		  _ret += " " +  newLabel + ":" + n.f4.accept(this) + "goto " + entry + ";";
+		  _ret += " " +  newLabel + ":" + n.f4.accept(this) + "goto " + entry + ";" + genName() + ":";
 	  }
 	  else{
 	      _ret += " " +  n.f0.accept(this);

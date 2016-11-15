@@ -537,7 +537,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " +n.f5.accept(this);
       _ret += " " +n.f6.accept(this);
       _ret += " " +n.f7.accept(this);
-      _ret += " " +n.f8.accept(this);
+      if(n.f8.f0.choice instanceof Block)
+    	  _ret += " " +n.f8.accept(this);
+      else
+    	  _ret += " {" +n.f8.accept(this)+"}";
       return _ret;
    }
 
@@ -554,7 +557,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " +n.f1.accept(this);
       _ret += " " +n.f2.accept(this);
       _ret += " " +n.f3.accept(this);
-      _ret += " " +n.f4.accept(this);
+      if(n.f4.f0.choice instanceof Block)
+    	  _ret += " " +n.f4.accept(this);
+      else
+    	  _ret += " {" +n.f4.accept(this)+"}";
       return _ret;
    }
 
@@ -570,7 +576,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(DoWhile n) {
       String _ret="";
       _ret += " " +n.f0.accept(this);
-      _ret += " " +n.f1.accept(this);
+      if(n.f1.f0.choice instanceof Block)
+    	  _ret += " " +n.f1.accept(this);
+      else
+    	  _ret += " {" +n.f1.accept(this)+"}";
       _ret += " " +n.f2.accept(this);
       _ret += " " +n.f3.accept(this);
       _ret += " " +n.f4.accept(this);
@@ -637,7 +646,10 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " +n.f1.accept(this);
       _ret += " " +n.f2.accept(this);
       _ret += " " +n.f3.accept(this);
-      _ret += " " +n.f4.accept(this);
+      if(n.f4.f0.choice instanceof Block)
+    	  _ret += " " +n.f4.accept(this);
+      else
+    	  _ret += " {" +n.f4.accept(this)+"}";
       return _ret;
    }
 
@@ -656,9 +668,15 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " +n.f1.accept(this);
       _ret += " " +n.f2.accept(this);
       _ret += " " +n.f3.accept(this);
-      _ret += " " +n.f4.accept(this);
+      if(n.f4.f0.choice instanceof Block)
+    	  _ret += " " +n.f4.accept(this);
+      else
+    	  _ret += " {" +n.f4.accept(this)+"}";
       _ret += " " +n.f5.accept(this);
-      _ret += " " +n.f6.accept(this);
+      if(n.f6.f0.choice instanceof Block)
+    	  _ret += " " +n.f6.accept(this);
+      else
+    	  _ret += " {" +n.f6.accept(this)+"}";
       return _ret;
    }
 
