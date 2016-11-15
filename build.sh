@@ -35,4 +35,4 @@
 	cd ../tmp && cat deps temp5.c >output.c
 
 	# Remove all the temporary files
-	# rm temp*.c deps macroexp.c preproc.c
+	rm temp*.c deps macroexp.c preproc.c
