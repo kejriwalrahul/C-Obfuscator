@@ -868,7 +868,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       R _ret=null;
       n.f0.accept(this, argu);
       n.f1.accept(this, argu);
-      if (argu == null) {
+      if ((Integer)argu >= 1) {
         System.out.print(":");
       }
       return _ret;

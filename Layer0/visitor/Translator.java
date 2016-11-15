@@ -36,7 +36,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-         _ret += e.nextElement().accept(this);
+         _ret += " "+e.nextElement().accept(this);
          _count++;
       }
       return _ret;
@@ -47,7 +47,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
           String _ret="";
          int _count=0;
          for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-            _ret += e.nextElement().accept(this);
+            _ret += " "+e.nextElement().accept(this);
             _count++;
          }
          return _ret;
@@ -67,7 +67,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
        String _ret="";
       int _count=0;
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
-         _ret += e.nextElement().accept(this);
+         _ret += " "+e.nextElement().accept(this);
          _count++;
       }
       return _ret;
