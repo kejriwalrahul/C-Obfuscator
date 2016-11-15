@@ -68,6 +68,7 @@
 
 # define cabs2(b) (float) (b.re*b.re+b.im*b.im)
 
+typedef int complex;
 
 /* Global definitions for fft computation  */
 

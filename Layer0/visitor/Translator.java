@@ -16,7 +16,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
    			return false;
    		int count = 1;
    		int size = str.length() - 1;
-   		int i = 0;
+   		int i = 1;
    		for (; i<size && count != 0; ++i) {
    			switch (str.charAt(i)) {
    				case '(':
