@@ -136,6 +136,7 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
 
+      g.curr_func = null;
 
       return _ret;
    }
@@ -291,6 +292,8 @@ public class Pass1<R,A> implements GJVisitor<R,A> {
 
       n.f4.accept(this, argu);
       n.f5.accept(this, argu);
+
+      g.curr_func = null;
 
       return _ret;
    }
