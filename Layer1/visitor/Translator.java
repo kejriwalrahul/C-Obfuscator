@@ -117,6 +117,8 @@ public class Translator extends GJNoArguDepthFirst<String> {
 
    boolean isDeclaration = false;
    boolean possibleForwardReference = false;
+   boolean disableTranslation = false;
+   boolean disableNextTranslation = false;
    
    /**
     * f0 -> ( VariablesAndFunctions() )*
@@ -252,10 +254,13 @@ public class Translator extends GJNoArguDepthFirst<String> {
       _ret += " " +n.f1.accept(this);
       isDeclaration = false;
       
+      disableTranslation = true;
       _ret += " " +n.f2.accept(this);
       _ret += " " +n.f3.accept(this);
       _ret += " " +n.f4.accept(this);
       _ret += " " +n.f5.accept(this);
+      disableTranslation = false;
+      
       return _ret;
    }
 
@@ -862,6 +867,7 @@ public class Translator extends GJNoArguDepthFirst<String> {
     */
    public String visit(StructExpr n) {
       String _ret="";
+      disableNextTranslation = true;
       _ret += " " +n.f0.accept(this);
       _ret += " " +n.f1.accept(this);
       return _ret;
@@ -898,7 +904,14 @@ public class Translator extends GJNoArguDepthFirst<String> {
    public String visit(Identifier n) {
       String _ret="";
       String s = n.f0.accept(this);
-      if(isDeclaration){
+
+      if(disableNextTranslation){
+    	  disableNextTranslation = false;
+      }
+      else if(disableTranslation){
+    	  
+      }
+      else if(isDeclaration){
     	  s = bindName(s);    	  
       }
       else if(possibleForwardReference){
