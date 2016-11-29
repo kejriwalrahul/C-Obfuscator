@@ -5,5 +5,7 @@ Refer to this link for the original paper describing the transforms implemented 
 
 Usage: 
 1. Build using ```make```
+
 2. Run ```./build.sh <input_prog>```
+
 3. Output code can be found at ```tmp/output.c```
